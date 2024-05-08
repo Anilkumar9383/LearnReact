@@ -1,7 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React,{Component} from 'react';
-import { Router, Routes, Route } from 'react-router-dom'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom'
 import { Layout } from './components/layout.jsx'
 import Login from './components/login/login.jsx'
 import Home from './components/Home/home.jsx'
