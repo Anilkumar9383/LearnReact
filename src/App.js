@@ -4,7 +4,6 @@ import React,{Component} from 'react';
 import { Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/layout.jsx'
 import Login from './components/login/login.jsx'
-import Navbar from './components/navbar.jsx'
 import Home from './components/Home/home.jsx'
 
 function App() {
