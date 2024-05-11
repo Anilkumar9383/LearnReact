@@ -13,10 +13,10 @@ function navbar() {
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: '100px' }}
             navbarScroll
-          ><NavItem>
+          ><NavItem className="p-2">
               <Link to="/home">Home</Link>
             </NavItem>
-            <NavItem>
+            <NavItem className="p-2">
               <Link to="/login">Login</Link>
             </NavItem>
             {/* <Nav.Link><Link to="/home">Home</Link></Nav.Link>
