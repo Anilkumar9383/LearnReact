@@ -1,9 +1,6 @@
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
+import { Button, Container, Form, Nav, Navbar,NavItem} from 'react-bootstrap';
+
 
 function navbar() {
   return (
@@ -16,9 +13,14 @@ function navbar() {
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: '100px' }}
             navbarScroll
-          >
-            <Nav.Link><Link to="/home">Home</Link></Nav.Link>
-            <Nav.Link><Link to="/login">Login</Link></Nav.Link>
+          ><NavItem>
+              <Link to="/home">Home</Link>
+            </NavItem>
+            <NavItem>
+              <Link to="/login">Login</Link>
+            </NavItem>
+            {/* <Nav.Link><Link to="/home">Home</Link></Nav.Link>
+            <Nav.Link><Link to="/login">Login</Link></Nav.Link> */}
           </Nav>
           <Form className="d-flex">
             <Form.Control
