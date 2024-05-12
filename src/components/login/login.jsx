@@ -1,53 +1,70 @@
 import React, { useState, useEffect } from 'react';
-//import axios from 'axios';
+import apiURL from '../Common/ApiUrl.jsx';
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  //const router = useRouter()
+  const navigate = useNavigate()
   useEffect(() => {
-    fetchData();
+    //document.body.style.backgroundImage = 'conic-gradient(#ffd4d4, blue, blue, blue, #ffd4d4)';
+    document.body.style.backgroundImage = 'linear-gradient(to bottom, white,blue)';
   }, []);
 
-  const fetchData = async () => {
+  function submitUser(e) {
     try {
-      const response = await fetch("https://akwebapi.somee.com/api/Login/GetLogins", {method: "Post"});
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const jsonData = await response.json();
-      setData(jsonData);
+      e.preventDefault();
 
+      setLoading(true);
+      fetch(apiURL + 'Login/Auth', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === 'success') {
+            localStorage.setItem('JwtToken', data.token)
+            setUsername('')
+            setPassword('')
+            navigate('/home')
+            alert("You Have Login successfully");
+          } else {
+            alert("Invalid Username or Password");
+          }
+        })
     } catch (error) {
-      setError(error.message);
+      alert(error.message);
     } finally {
       setLoading(false);
     }
   }
-
+  const handelSignup = () => {
+    navigate('/signup');
+  };
   return (
-    <div>
-      <h1>Login</h1>
-      <br />
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Password</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((Obj,i) => (
-            <tr key={i}>
-              <td>{Obj.Username}</td>
-              <td>{Obj.Password}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className='logindiv'>
+      <div className='loginform'>
+        <h3 className='font-bold text-center text-white'>Login</h3>
+        <label className='text-white font-bold'>User Name<span className='text-danger'>*</span></label>
+        <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
+        <label className='d-block text-danger' style={{visibility:"hidden"}}>Please Enter Username</label>
+        <label className='text-white font-bold'>Password<span className='text-danger'>*</span></label>
+        <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+        <label className='d-block text-danger' style={{visibility:"hidden"}}>Please Enter Password</label>
+        {loading && <p>Loading...</p>}
+        <div className='text-end'>
+        <label className='text-info'>Forget Password</label>
+        </div>
+        <div className='d-flex'>
+          <button type="button" className="m-2 btnLogin" onClick={submitUser}>Login</button>
+          <button type="button" className="m-2 btnSignUp" onClick={handelSignup}>Sign Up</button>
+        </div>
+      </div>
     </div>
   );
 }
