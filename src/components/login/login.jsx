@@ -12,13 +12,11 @@ function Login() {
   const navigate = useNavigate()
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
-    let form = document.getElementById("loginpage")
     if (menuName === "SignUpForm") {
       let form1 = document.getElementById(menuName)
       let form2 = document.getElementById("Loginform")
       form1.style.display = 'block';
       form2.style.display = 'none';
-      form2.classList.add("Loginform");
     }
     else {
       let form1 = document.getElementById("SignUpForm")
