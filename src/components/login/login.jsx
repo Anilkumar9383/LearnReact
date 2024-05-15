@@ -7,11 +7,25 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [activeMenu, setActiveMenu] = useState('Login');
+  const [activeMenu, setActiveMenu] = useState('Loginform');
   //const router = useRouter()
   const navigate = useNavigate()
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
+    let form = document.getElementById("loginpage")
+    if (menuName === "SignUpForm") {
+      let form1 = document.getElementById(menuName)
+      let form2 = document.getElementById("Loginform")
+      form1.style.display = 'block';
+      form2.style.display = 'none';
+      form2.classList.add("Loginform");
+    }
+    else {
+      let form1 = document.getElementById("SignUpForm")
+      let form2 = document.getElementById(menuName)
+      form1.style.display = 'none';
+      form2.style.display = 'block';
+    }
   };
   useEffect(() => {
     //document.body.style.backgroundImage = 'conic-gradient(#ffd4d4, blue, blue, blue, #ffd4d4)';
@@ -60,31 +74,55 @@ function Login() {
       return true;
     }
   }
-  const handelSignup = () => {
-    navigate('/signup');
-  };
+  // const handelSignup = () => {
+  //   navigate('/signup');
+  // };
   return (
     <div className='logindiv'>
-      <div className='loginform'>
+      <div id='loginpage'>
         <div className='d-flex loginsignup justify-content-between'>
-          <button type="button" className={`btns ${activeMenu === 'Login' ? 'Activelog' : ''}`} onClick={() => handleMenuClick('Login')}>Login</button>
-          <button type="button" className={`btns ${activeMenu === 'SignUp' ? 'Activelog' : ''}`} onClick={() => handleMenuClick('SignUp')}>Sign Up</button>
+          <button type="button" className={`btns ${activeMenu === 'Loginform' ? 'Activelog' : ''}`} onClick={() => handleMenuClick('Loginform')}>Login</button>
+          <button type="button" className={`btns ${activeMenu === 'SignUpForm' ? 'Activelog' : ''}`} onClick={() => handleMenuClick('SignUpForm')}>Sign Up</button>
         </div>
         <br />
-        <label className='text-white font-bold'>User Name<span className='text-danger'>*</span></label>
-        <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
-        <label className='d-block text-danger' id='txtusername' style={{ visibility: "hidden" }}>Please Enter Username</label>
-        <label className='text-white font-bold'>Password<span className='text-danger'>*</span></label>
-        <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
-        <label className='d-block text-danger' id='txtpassword' style={{ visibility: "hidden" }}>Please Enter Password</label>
-        {loading && <p>Loading...</p>}
-        <div className='d-flex justify-content-between align-items-center'>
-          <button type="button" className="mx-auto my-3 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Login</button>
-          <button type="button" style={{ display: 'none', width: '50%' }} className="m-auto btnSignUp" onClick={handelSignup}>Sign Up</button>
-        </div>
-        <div className='d-flex justify-content-between align-items-center'>
-          <Link to="/home" >Direct Open</Link>
-          <label className='text-info' id='btnforget'>Forget Password</label>
+        <div id='maindiv'>
+          <div id='Loginform' className={`${activeMenu === 'SignUpForm' ? 'LoginformOff' : 'LoginformOn'}`}>
+            <label className='text-white font-bold'>User Name<span className='text-danger'>*</span></label>
+            <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
+            <label className='d-block text-danger' id='txtusername' style={{ visibility: "hidden" }}>Please Enter Username</label>
+            <label className='text-white font-bold'>Password<span className='text-danger'>*</span></label>
+            <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+            <label className='d-block text-danger' id='txtpassword' style={{ visibility: "hidden" }}>Please Enter Password</label>
+            {loading && <p>Loading...</p>}
+            <div className='d-flex justify-content-between align-items-center'>
+              <button type="button" className="mx-auto my-3 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Login</button>
+            </div>
+            <div className='d-flex justify-content-between align-items-center'>
+              <Link to="/home" >Direct Open</Link>
+              <label className='text-info' id='btnforget'>Forget Password</label>
+            </div>
+          </div>
+          <div id='SignUpForm' className={`${activeMenu === 'Loginform' ? 'SignUpForm' : ''}`}>
+            <label className='text-white font-bold mt-2'>Full Name<span className='text-danger'>*</span></label>
+            <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
+            <label className=' text-danger' id='txtusername' style={{ display:'none' }}>Please Enter Username</label>
+
+            <label className='text-white font-bold mt-2'>Email Id<span className='text-danger'>*</span></label>
+            <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
+            <label className=' text-danger' id='txtusername' style={{ display:'none' }}>Please Enter Username</label>
+
+            <label className='text-white font-bold mt-2'>Password<span className='text-danger'>*</span></label>
+            <input value={username} type="password" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
+            <label className=' text-danger' id='txtusername' style={{ display:'none' }}>Please Enter Username</label>
+
+            <label className='text-white font-bold mt-2'>Conform Password<span className='text-danger'>*</span></label>
+            <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+            <label className=' text-danger' id='txtpassword' style={{ display:"none" }}>Please Enter Password</label>
+
+            <div className='d-flex justify-content-between align-items-center mt-3'>
+              <button type="button" className="mx-auto my-1 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Sign Up</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

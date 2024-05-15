@@ -2,7 +2,7 @@ body {
     margin: 0px;
     padding: 0px;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-Image: linear-gradient(to bottom, white, blue);
 }
 
@@ -55,7 +55,8 @@ body {
     border: 1px solid black;
     box-shadow: 2px 2px 2px black;
 }
-.Activelog{
+
+.Activelog {
     width: 100px;
     color: wheat;
     background: blue;
@@ -79,23 +80,84 @@ body {
     height: 100vh;
 }
 
-.loginform {
+#loginpage {
     margin: auto;
     width: 330px;
     background-color: #005f7e;
     padding: 40px 20px;
     border-radius: 25px;
     box-shadow: 15px 15px 30px;
+    /* overflow: hidden; */
 }
 
 #btnforget:hover {
     text-decoration: underline;
     cursor: pointer;
 }
-.loginsignup{
+
+.loginsignup {
     width: 200px;
     border: 1px solid white;
     border-radius: 40px;
     justify-content: center;
     margin: auto;
 }
+#maindiv{
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    /* width: 750px; */
+}
+#Loginform {
+    width: 100%;
+    position: relative;
+}
+
+#SignUpForm {
+    width: 100%;
+    position: relative;
+    display: none;
+}
+
+/* .LoginformOn {
+   
+}
+
+.LoginformOff {
+    animation: mymove 2s normal forwards ease-in-out;
+}
+
+.SignUpForm {
+    width: 100%;
+    animation: mymove .5s normal forwards ease-in-out; 
+}
+
+@keyframes mymove {
+    0% {
+
+    }
+
+    20% {
+
+    }
+
+    40% {
+
+    }
+
+    60% {
+
+    }
+
+    80% {
+
+    }
+
+    90% {
+
+    }
+
+    100% {
+
+    }
+} */
