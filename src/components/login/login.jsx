@@ -26,18 +26,18 @@ function Login() {
       let form2 = document.getElementById("Loginform")
       form1.style.display = 'block';
       form2.style.display = 'none';
-      setFullName('')
-      setEmailId('')
-      setNpassword('')
-      setCpassword('')
+      setUsername('');
+      setPassword('');
     }
     else {
       let form1 = document.getElementById("SignUpForm")
       let form2 = document.getElementById(menuName)
       form1.style.display = 'none';
       form2.style.display = 'block';
-      setUsername('')
-      setPassword('')
+      setFullName('');
+      setEmailId('');
+      setNpassword('');
+      setCpassword('');
     }
   };
   useEffect(() => {
