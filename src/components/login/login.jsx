@@ -26,12 +26,18 @@ function Login() {
       let form2 = document.getElementById("Loginform")
       form1.style.display = 'block';
       form2.style.display = 'none';
+      setFullName('')
+      setEmailId('')
+      setNpassword('')
+      setCpassword('')
     }
     else {
       let form1 = document.getElementById("SignUpForm")
       let form2 = document.getElementById(menuName)
       form1.style.display = 'none';
       form2.style.display = 'block';
+      setUsername('')
+      setPassword('')
     }
   };
   useEffect(() => {
@@ -91,7 +97,7 @@ function Login() {
           headers: {
             'content-type': 'application/json',
           },
-          body: JSON.stringify({ fullName :fullName, emailId :emailId.toLowerCase(), password :npassword ,}),
+          body: JSON.stringify({ fullName: fullName, emailId: emailId.toLowerCase(), password: npassword, }),
         })
           .then((res) => res.json())
           .then((data) => {
@@ -101,10 +107,10 @@ function Login() {
               setEmailId('')
               setNpassword('')
               setCpassword('')
-            } else if(data[0].Responce === 'Exist') {
+            } else if (data[0].Responce === 'Exist') {
               alert("you have already registered");
             }
-            else{
+            else {
               alert("Something went wrong!");
             }
           })
@@ -126,7 +132,7 @@ function Login() {
       setTxtFullName("Name should be 3 to 20 charecters");
       isvalid = false;
     }
-    else{
+    else {
       setTxtFullName('');
     }
 
@@ -138,10 +144,10 @@ function Login() {
       setTxtEmailId("Invalid Email Id");
       isvalid = false;
     }
-    else{
+    else {
       setTxtEmailId('');
     }
-   
+
     if (npassword.toString().trim() === "") {
       setTxtNpassword("Please Enter Password");
       isvalid = false;
@@ -150,7 +156,7 @@ function Login() {
       setTxtNpassword("Password should be Ex:- Abcd@123");
       isvalid = false;
     }
-    else{
+    else {
       setTxtNpassword('');
     }
 
@@ -162,7 +168,7 @@ function Login() {
       setTxtCpassword("Password not matched");
       isvalid = false;
     }
-    else{
+    else {
       setTxtCpassword('');
     }
     return isvalid;
