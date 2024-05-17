@@ -20,24 +20,31 @@ function Login() {
   //const router = useRouter()
   const navigate = useNavigate()
   const handleMenuClick = (menuName) => {
+    debugger;
     setActiveMenu(menuName);
     if (menuName === "SignUpForm") {
       let form1 = document.getElementById(menuName)
       let form2 = document.getElementById("Loginform")
       form1.style.display = 'block';
       form2.style.display = 'none';
-      setUsername('');
-      setPassword('');
+      setFullName('');
+      setEmailId('');
+      setNpassword('');
+      setCpassword('');
+      setTxtFullName('');
+      setTxtEmailId('');
+      setTxtNpassword('');
+      setTxtCpassword('');
     }
     else {
       let form1 = document.getElementById("SignUpForm")
       let form2 = document.getElementById(menuName)
       form1.style.display = 'none';
       form2.style.display = 'block';
-      setFullName('');
-      setEmailId('');
-      setNpassword('');
-      setCpassword('');
+      setUsername('');
+      setPassword('');
+      document.getElementById('txtusername').style.visibility = 'hidden';
+      document.getElementById('txtpassword').style.visibility = 'hidden';
     }
   };
   useEffect(() => {
