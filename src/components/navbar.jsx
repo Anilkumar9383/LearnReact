@@ -20,7 +20,7 @@ function NavbarComponent() {
   };
 
   return (
-    <Navbar expand="lg" className="navbg">
+    <Navbar expand="lg" className="navdiv">
       <Container fluid>
         <Navbar.Brand href="#" className='logodiv'><img src={Image} className='logo' alt='Ak Logo' /></Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
