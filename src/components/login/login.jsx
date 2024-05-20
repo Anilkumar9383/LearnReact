@@ -10,10 +10,12 @@ function Login() {
   const [responce, setResponce] = useState('');
   const [fullName, setFullName] = useState('');
   const [emailId, setEmailId] = useState('');
+  const [nusername, setNUsername] = useState('');
   const [npassword, setNpassword] = useState('');
   const [cpassword, setCpassword] = useState('');
   const [txtfullName, setTxtFullName] = useState('');
   const [txtemailId, setTxtEmailId] = useState('');
+  const [txtUsername, setTxtNUsername] = useState('');
   const [txtnpassword, setTxtNpassword] = useState('');
   const [txtcpassword, setTxtCpassword] = useState('');
   const [activeMenu, setActiveMenu] = useState('Loginform');
@@ -29,10 +31,12 @@ function Login() {
       form2.style.display = 'none';
       setFullName('');
       setEmailId('');
+      setNUsername('');
       setNpassword('');
       setCpassword('');
       setTxtFullName('');
       setTxtEmailId('');
+      setTxtNUsername('');
       setTxtNpassword('');
       setTxtCpassword('');
     }
@@ -65,7 +69,13 @@ function Login() {
           .then((res) => res.json())
           .then((data) => {
             if (data.Status === 'Success') {
-              localStorage.setItem('JwtToken', data.token)
+              window.sessionStorage.setItem('UserId', data.Id)
+              window.sessionStorage.setItem('FullName', data.FullName)
+              window.sessionStorage.setItem('EmailId', data.EmailId)
+              window.sessionStorage.setItem('Username', data.Username)
+              window.sessionStorage.setItem('Password', data.Password)
+              window.sessionStorage.setItem('LastLogin', data.LastLogin)
+              window.sessionStorage.setItem('JwtToken', data.token)
               setResponce(data.Status);
               setUsername('')
               setPassword('')
@@ -83,6 +93,7 @@ function Login() {
   }
   const checkfildes = () => {
     if (username.toString().trim() === "" || password.toString().trim() === "") {
+      setResponce('');
       document.getElementById('txtusername').style.visibility = username.toString().trim() === "" ? 'visible' : 'hidden';
       document.getElementById('txtpassword').style.visibility = password.toString().trim() === "" ? 'visible' : 'hidden';
       return false;
@@ -104,7 +115,7 @@ function Login() {
           headers: {
             'content-type': 'application/json',
           },
-          body: JSON.stringify({ fullName: fullName, emailId: emailId.toLowerCase(), password: npassword, }),
+          body: JSON.stringify({ fullName: fullName, emailId: emailId.toLowerCase(), username: nusername, password: npassword, }),
         })
           .then((res) => res.json())
           .then((data) => {
@@ -112,10 +123,14 @@ function Login() {
               alert("You have successfully registered");
               setFullName('')
               setEmailId('')
+              setNUsername('')
               setNpassword('')
               setCpassword('')
             } else if (data[0].Responce === 'Exist') {
               alert("you have already registered");
+            }
+            else if (data[0].Responce === 'ExistUser') {
+              alert("Username already Exist");
             }
             else {
               alert("Something went wrong!");
@@ -153,6 +168,18 @@ function Login() {
     }
     else {
       setTxtEmailId('');
+    }
+
+    if (nusername.toString().trim() === "") {
+      setTxtNUsername("Please create username");
+      isvalid = false;
+    }
+    else if (nusername.toString().trim().length < 3 || nusername.toString().trim().length > 20) {
+      setTxtNUsername("Invalid Username");
+      isvalid = false;
+    }
+    else {
+      setTxtNUsername('');
     }
 
     if (npassword.toString().trim() === "") {
@@ -193,17 +220,16 @@ function Login() {
             <label className='text-white font-bold d-block'>User Name<span className='text-danger'>*</span></label>
             <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
             <label className='d-block text-danger' id='txtusername' style={{ visibility: "hidden" }}>Please Enter Username</label>
-            <label className='text-white font-bold d-block'>Password<span className='text-danger'>*</span></label>
+            <label className='text-white font-bold d-flex justify-content-between'><span>Password<span className='text-danger'>*</span></span><label className='text-info' id='btnforget'>Forget Password</label></label>
             <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
             <label className='d-block text-danger' id='txtpassword' style={{ visibility: "hidden" }}>Please Enter Password</label>
             <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <p>Loading...</p>}
             <div className='d-flex justify-content-between align-items-center'>
               <button type="button" className="mx-auto my-3 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Login</button>
             </div>
-            <div className='d-flex justify-content-between align-items-center'>
-              <Link to="/home" >Direct Open</Link>
+            {/* <div className='d-flex justify-content-between align-items-center'>
               <label className='text-info' id='btnforget'>Forget Password</label>
-            </div>
+            </div> */}
           </div>
           <div id='SignUpForm' className={`${activeMenu === 'Loginform' ? 'SignUpForm' : ''}`}>
             <label className='text-white font-bold d-block'>Full Name<span className='text-danger'>*</span></label>
@@ -213,6 +239,10 @@ function Login() {
             <label className='text-white font-bold d-block'>Email Id<span className='text-danger'>*</span></label>
             <input value={emailId} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setEmailId(e.target.value)} />
             <label className=' text-danger d-block' id='txtEmailId'>{txtemailId}</label>
+
+            <label className='text-white font-bold d-block'>Username<span className='text-danger'>*</span></label>
+            <input value={nusername} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setNUsername(e.target.value)} />
+            <label className=' text-danger d-block' id='txtEmailId'>{txtUsername}</label>
 
             <label className='text-white font-bold d-block'>Password<span className='text-danger'>*</span></label>
             <input value={npassword} type="password" className='form-control' placeholder="Enter Username" onChange={(e) => setNpassword(e.target.value)} />
