@@ -10,6 +10,8 @@ import SignalR from './components/SignalR/SignalR.jsx'
 import UserSetting from './components/UserSetting/UserSetting.jsx'
 import Logindetails from './components/Master/Logindetails.jsx'
 import UserMaster from './components/Master/UserMaster.jsx'
+import Loder from './components/Common/Loder.jsx'
+//import './components/Common/Loder.css'
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
       </Routes>
       <Routes>
         <Route exact path="/login" element={<Login/>} />
+      </Routes>
+      <Routes>
+        <Route exact path="/Loder" element={<Loder/>} />
       </Routes>
       <Routes>
         <Route exact path="/home" element={<Layout><Home/></Layout>} />

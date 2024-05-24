@@ -126,7 +126,7 @@ function NavbarComponent() {
                 <label className='d-flex'>{window.sessionStorage.getItem('Username')}</label>
               </div>
             </div>
-            <div className='my-auto'><MdLogout size={30} onClick={handleLogout} style={{ cursor: "pointer" }} className='pointer' /></div>
+            <div className='my-auto'><MdLogout size={30} onClick={handleLogout} style={{ cursor: "pointer",marginLeft:'20px' }} className='pointer' /></div>
           </div>
         </Container>
       </Navbar>

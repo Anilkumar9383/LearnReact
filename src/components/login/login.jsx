@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import apiURL from '../Common/ApiUrl.jsx';
 import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom';
+//import Loder from '../Common/Loder.jsx';
+//import { Link } from 'react-router-dom';
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,6 @@ function Login() {
   //const router = useRouter()
   const navigate = useNavigate()
   const handleMenuClick = (menuName) => {
-    debugger;
     setActiveMenu(menuName);
     if (menuName === "SignUpForm") {
       let form1 = document.getElementById(menuName)
@@ -55,10 +55,10 @@ function Login() {
   }, []);
 
   const submitUser = (e) => {
+    setLoading(true);
     try {
       e.preventDefault();
       if (checkfildes()) {
-        setLoading(true);
         fetch(apiURL + 'Login/Auth', {
           method: 'POST',
           headers: {
@@ -86,6 +86,7 @@ function Login() {
           })
       }
     } catch (error) {
+      setLoading(false);
       alert(error.message);
     } finally {
       setLoading(false);
@@ -105,11 +106,10 @@ function Login() {
     }
   }
   const SignUpUser = (e) => {
-    debugger;
+    setLoading(true);
     try {
       e.preventDefault();
       if (checkSignUpfildes()) {
-        setLoading(true);
         fetch(apiURL + 'SignUp/SignUpUser', {
           method: 'POST',
           headers: {
@@ -138,6 +138,7 @@ function Login() {
           })
       }
     } catch (error) {
+      setLoading(false);
       alert(error.message);
     } finally {
       setLoading(false);

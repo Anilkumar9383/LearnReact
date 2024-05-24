@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import apiURL from '../Common/ApiUrl.jsx';
 import { useNavigate } from 'react-router-dom';
+import Loder from '../Common/Loder.jsx'
 
 function UserMaster() {
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const navigate = useNavigate();
     const token = window.sessionStorage.getItem('JwtToken');
@@ -11,6 +13,7 @@ function UserMaster() {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 setData([]);
                 if (token) {
@@ -36,15 +39,21 @@ function UserMaster() {
                 console.error('Error fetching data:', error);
                 //navigate('/login');
                 setData([]);
+                setLoading(false);
             }
+            setLoading(false);
         };
 
         fetchData();
     }, [token, navigate]);
 
     return (
-        <div>
-            <table class="table table-bordered">
+        <div style={{ overflowX: "auto" }}>
+            {loading ?
+                <Loder />
+                : null
+            }
+            <table class="table table-bordered m-auto">
                 <thead>
                     <tr>
                         <th>Id</th>
