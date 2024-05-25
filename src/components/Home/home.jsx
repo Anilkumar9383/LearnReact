@@ -52,16 +52,16 @@ function Home() {
           </div>
           <div>
             <h2>Data</h2>
-            <textarea rows={4} cols={100} value={originalData} placeholder={eventType === "Encrypt" ? 'Ex: - "Abcdefgh"' : "Ex: - " + placeholderString} onChange={(e) => setOriginalData(e.target.value)} />
+            <textarea rows={4} className='w-100' value={originalData} placeholder={eventType === "Encrypt" ? 'Ex: - "Abcdefgh"' : "Ex: - " + placeholderString} onChange={(e) => setOriginalData(e.target.value)} />
           </div>
           <div>
             <h2>Encrypted Data</h2>
-            <textarea rows={4} cols={100} readOnly value={encryptedData} />
+            <textarea rows={4} className='w-100' readOnly value={encryptedData} />
           </div>
 
           <div>
             <h2>Decrypted Data</h2>
-            <textarea rows={4} cols={100} readOnly value={decryptedData} />
+            <textarea rows={4} className='w-100' readOnly value={decryptedData} />
           </div>
         </div>
         : null}
