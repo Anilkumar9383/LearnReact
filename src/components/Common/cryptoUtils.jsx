@@ -1,8 +1,8 @@
 import CryptoJS from 'crypto-js';
 
 const secretKey = 'NERRWNFRE8MJD74HDIR5R4N534AK5J84';
-const iv = CryptoJS.enc.Hex.parse('JNDWGEW3HSDRNGJB4238342BNBEBJF8M'); // Fixed IV
-const mode = CryptoJS.mode.CBC; // Use CBC mode for better security
+const iv = CryptoJS.enc.Hex.parse('JNDWGEW3HSDRNGJB4238342BNBEBJF8M'); 
+const mode = CryptoJS.mode.CBC;
 const padding = CryptoJS.pad.Pkcs7;
 
 // Encrypt JSON data
