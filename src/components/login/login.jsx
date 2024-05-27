@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import apiURL from '../Common/ApiUrl.jsx';
 import { useNavigate } from 'react-router-dom'
-//import Loder from '../Common/Loder.jsx';
-//import { Link } from 'react-router-dom';
+import { encryptJSON, decryptJSON } from '../Common/cryptoUtils.jsx';
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -55,27 +54,32 @@ function Login() {
   }, []);
 
   const submitUser = (e) => {
+    debugger;
     setLoading(true);
     try {
       e.preventDefault();
       if (checkfildes()) {
+        const inpObj = encryptJSON(JSON.stringify({ "username": username, "password": password }));
         fetch(apiURL + 'Login/Auth', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
           },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify(inpObj),
         })
-          .then((res) => res.json())
+          .then((res) => res.text())
           .then((data) => {
-            if (data.Status === 'Success') {
-              window.sessionStorage.setItem('UserId', data.Id)
-              window.sessionStorage.setItem('FullName', data.FullName)
-              window.sessionStorage.setItem('EmailId', data.EmailId)
-              window.sessionStorage.setItem('Username', data.Username)
-              window.sessionStorage.setItem('Password', data.Password)
-              window.sessionStorage.setItem('LastLogin', data.LastLogin)
-              window.sessionStorage.setItem('JwtToken', data.token)
+            const result = JSON.parse(decryptJSON(JSON.stringify(data)));
+            console.log(result);
+            console.log(result.Status);
+            if (result.Status === 'Success') {
+              window.sessionStorage.setItem('UserId', result.Id)
+              window.sessionStorage.setItem('FullName', result.FullName)
+              window.sessionStorage.setItem('EmailId', result.EmailId)
+              window.sessionStorage.setItem('Username', result.Username)
+              //window.sessionStorage.setItem('Password', result.Password)
+              window.sessionStorage.setItem('LastLogin', result.LastLogin)
+              window.sessionStorage.setItem('JwtToken', result.token)
               setResponce(data.Status);
               setUsername('')
               setPassword('')

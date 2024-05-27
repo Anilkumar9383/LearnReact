@@ -35,9 +35,9 @@ function UserSetting() {
                 <input className='form-control' type='text' disabled value={window.sessionStorage.getItem('EmailId')} />
             </div>
             <div className='col-md-12'>
-                <label className='d-block'>Password</label>
-                <input className='form-control' type='password' disabled value={window.sessionStorage.getItem('Password')} />
                 <div className='' style={{ display: 'none' }}>
+                    <label className='d-block mt-2'>Old Password</label>
+                    <input className='form-control' type='password' />
                     <label className='d-block mt-2'>New password</label>
                     <input className='form-control' type='password' />
                     <label className='d-block mt-2'>Confirm new password</label>

@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 
-const secretKey = 'NERRWNFRE8MJD74HDIR5R4N534AK5J84';
-const iv = CryptoJS.enc.Hex.parse('JNDWGEW3HSDRNGJB4238342BNBEBJF8M'); 
+const secretKey = CryptoJS.enc.Utf8.parse('C7PfyuGF26bxjtjmai4pR7BpDH7FPZiQ');
+const IV = '';
 const mode = CryptoJS.mode.CBC;
 const padding = CryptoJS.pad.Pkcs7;
 
@@ -9,13 +9,14 @@ const padding = CryptoJS.pad.Pkcs7;
 export const encryptJSON = (jsonData) => {
   debugger;
   try {
-    const jsonString = JSON.stringify(jsonData);
-    const encrypted = CryptoJS.AES.encrypt(jsonString, secretKey, {
-      iv: iv,
+    let data = jsonData.replace(/[\r\n]/gm,'');
+    let jsonObj = data.replace(/(^"|"$)/g,'');
+    let encrypted = CryptoJS.AES.encrypt(jsonObj, secretKey, {
+      iv: CryptoJS.enc.Utf8.parse(IV),
       mode: mode,
       padding: padding
-    }).toString();
-    return encrypted;
+    });
+    return encrypted.toString();
   } catch (error) {
     console.error('Encryption error:', error);
     return null;
@@ -27,7 +28,7 @@ export const decryptJSON = (cipherText) => {
   debugger;
   try {
     const bytes = CryptoJS.AES.decrypt(JSON.parse(cipherText), secretKey, {
-      iv: iv,
+      iv: CryptoJS.enc.Utf8.parse(IV),
       mode: mode,
       padding: padding
     });
