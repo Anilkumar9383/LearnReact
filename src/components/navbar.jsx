@@ -99,8 +99,9 @@ function NavbarComponent() {
     navigate('/UserSetting');
   }
   let name = window.sessionStorage.getItem('FullName').split(" ");
+  debugger;
   let initials = '';
-  if (name.length < 1) {
+  if (name.length < 2) {
     initials = name[0].charAt(0).toUpperCase()
   }
   else {

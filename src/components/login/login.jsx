@@ -54,7 +54,6 @@ function Login() {
   }, []);
 
   const submitUser = (e) => {
-    debugger;
     setLoading(true);
     try {
       e.preventDefault();
@@ -70,9 +69,8 @@ function Login() {
           .then((res) => res.text())
           .then((data) => {
             const result = JSON.parse(decryptJSON(JSON.stringify(data)));
-            console.log(result);
-            console.log(result.Status);
             if (result.Status === 'Success') {
+              setResponce(data.Status);
               window.sessionStorage.setItem('UserId', result.Id)
               window.sessionStorage.setItem('FullName', result.FullName)
               window.sessionStorage.setItem('EmailId', result.EmailId)
@@ -80,20 +78,19 @@ function Login() {
               //window.sessionStorage.setItem('Password', result.Password)
               window.sessionStorage.setItem('LastLogin', result.LastLogin)
               window.sessionStorage.setItem('JwtToken', result.token)
-              setResponce(data.Status);
               setUsername('')
               setPassword('')
+              setLoading(false);
               navigate('/home')
             } else {
-              setResponce(data.Status);
+              setLoading(false);
+              setResponce(result.Status);
             }
           })
       }
     } catch (error) {
       setLoading(false);
       alert(error.message);
-    } finally {
-      setLoading(false);
     }
   }
   const checkfildes = () => {
@@ -228,7 +225,7 @@ function Login() {
             <label className='text-white font-bold d-flex justify-content-between'><span>Password<span className='text-danger'>*</span></span><label className='text-info' id='btnforget'>Forget Password</label></label>
             <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
             <label className='d-block text-danger' id='txtpassword' style={{ visibility: "hidden" }}>Please Enter Password</label>
-            <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <p>Loading...</p>}
+            <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <p className='text-danger'>Loading...</p>}
             <div className='d-flex justify-content-between align-items-center'>
               <button type="button" className="mx-auto my-3 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Login</button>
             </div>
