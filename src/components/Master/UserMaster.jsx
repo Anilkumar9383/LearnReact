@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import apiURL from '../Common/ApiUrl.jsx';
 import { useNavigate } from 'react-router-dom';
 import Loder from '../Common/Loder.jsx'
+import { encryptJSON, decryptJSON } from '../Common/cryptoUtils.jsx';
 
 function UserMaster() {
     const [loading, setLoading] = useState(false);
@@ -17,27 +18,26 @@ function UserMaster() {
             try {
                 setData([]);
                 if (token) {
+                    const inpObj = encryptJSON(JSON.stringify({ "Id": Id, "Username": Username }));
                     const response = await fetch(apiURL + "GetUser/GetUserDetails", {
                         method: "POST",
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ id: Id, username: Username }),
+                        body: JSON.stringify(inpObj),
                     });
-
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-
-                    const jsonData = await response.json();
-                    setData(jsonData);
+                    const data = await response.text();
+                    const result = JSON.parse(decryptJSON(JSON.stringify(data)));
+                    setData(result);
                 } else {
-                    //navigate('/login');
+                    navigate('/login');
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                //navigate('/login');
                 setData([]);
                 setLoading(false);
             }
@@ -53,7 +53,7 @@ function UserMaster() {
                 <Loder />
                 : null
             }
-            <table class="table table-bordered m-auto">
+            <table className="table table-bordered m-auto">
                 <thead>
                     <tr>
                         <th>Id</th>

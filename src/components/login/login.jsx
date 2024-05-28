@@ -38,6 +38,8 @@ function Login() {
       setTxtNUsername('');
       setTxtNpassword('');
       setTxtCpassword('');
+      setLoading(false);
+      setResponce('');
     }
     else {
       let form1 = document.getElementById("SignUpForm")
@@ -46,6 +48,8 @@ function Login() {
       form2.style.display = 'block';
       setUsername('');
       setPassword('');
+      setLoading(false);
+      setResponce('');
       document.getElementById('txtusername').style.visibility = 'hidden';
       document.getElementById('txtpassword').style.visibility = 'hidden';
     }
@@ -54,10 +58,11 @@ function Login() {
   }, []);
 
   const submitUser = (e) => {
-    setLoading(true);
+    setResponce('');
     try {
       e.preventDefault();
       if (checkfildes()) {
+        setLoading(true);
         const inpObj = encryptJSON(JSON.stringify({ "username": username, "password": password }));
         fetch(apiURL + 'Login/Auth', {
           method: 'POST',
@@ -87,6 +92,11 @@ function Login() {
               setResponce(result.Status);
             }
           })
+          .catch((error) => {
+            console.error('Error during login:', error);
+            setLoading(false);
+            setResponce('An error occurred. Please try again.');
+          });
       }
     } catch (error) {
       setLoading(false);
@@ -107,42 +117,48 @@ function Login() {
     }
   }
   const SignUpUser = (e) => {
-    setLoading(true);
     try {
       e.preventDefault();
       if (checkSignUpfildes()) {
+        setLoading(true);
+        const inpObj = encryptJSON(JSON.stringify({ "FullName": fullName, "EmailId": emailId.toLowerCase(), "Username": nusername, "Password": npassword, }));
         fetch(apiURL + 'SignUp/SignUpUser', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
           },
-          body: JSON.stringify({ fullName: fullName, emailId: emailId.toLowerCase(), username: nusername, password: npassword, }),
+          body: JSON.stringify(inpObj),
         })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data[0].Responce === 'Success') {
+        .then((res) => res.text())
+        .then((data) => {
+          const result = JSON.parse(decryptJSON(JSON.stringify(data)));
+          setLoading(false);
+            if (result[0].Responce === 'Success') {
               alert("You have successfully registered");
               setFullName('')
               setEmailId('')
               setNUsername('')
               setNpassword('')
               setCpassword('')
-            } else if (data[0].Responce === 'Exist') {
+            } else if (result[0].Responce === 'Exist') {
               alert("you have already registered");
             }
-            else if (data[0].Responce === 'ExistUser') {
+            else if (result[0].Responce === 'ExistUser') {
               alert("Username already Exist");
             }
             else {
               alert("Something went wrong!");
             }
           })
+          .catch((error) => {
+            console.error('Error during login:', error);
+            setLoading(false);
+            setResponce('An error occurred. Please try again.');
+          });
       }
     } catch (error) {
       setLoading(false);
       alert(error.message);
-    } finally {
-      setLoading(false);
     }
   }
   const checkSignUpfildes = () => {
@@ -225,13 +241,10 @@ function Login() {
             <label className='text-white font-bold d-flex justify-content-between'><span>Password<span className='text-danger'>*</span></span><label className='text-info' id='btnforget'>Forget Password</label></label>
             <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
             <label className='d-block text-danger' id='txtpassword' style={{ visibility: "hidden" }}>Please Enter Password</label>
-            <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <p className='text-danger'>Loading...</p>}
-            <div className='d-flex justify-content-between align-items-center'>
+            <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <span className='text-danger'>Loading...</span>}
+            <div className='d-block d-flex justify-content-between align-items-center'>
               <button type="button" className="mx-auto my-3 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Login</button>
             </div>
-            {/* <div className='d-flex justify-content-between align-items-center'>
-              <label className='text-info' id='btnforget'>Forget Password</label>
-            </div> */}
           </div>
           <div id='SignUpForm' className={`${activeMenu === 'Loginform' ? 'SignUpForm' : ''}`}>
             <label className='text-white font-bold d-block'>Full Name<span className='text-danger'>*</span></label>
@@ -252,8 +265,8 @@ function Login() {
 
             <label className='text-white font-bold d-block'>Confirm Password<span className='text-danger'>*</span></label>
             <input value={cpassword} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setCpassword(e.target.value)} />
-            <label className=' text-danger d-block' id='txtCpassword'>{txtcpassword}</label>
-
+            <label className='text-danger d-block' id='txtCpassword'>{txtcpassword}</label>
+            <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <span className='text-danger'>Loading...</span>}
             <div className='d-flex justify-content-between align-items-center mt-3'>
               <button type="button" className="mx-auto my-1 btnLogin" style={{ width: '50%' }} onClick={SignUpUser}>Sign Up</button>
             </div>
