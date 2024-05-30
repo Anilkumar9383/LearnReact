@@ -11,16 +11,28 @@ function Home() {
   const placeholderObject = { "key": "value" };
   const placeholderString = JSON.stringify(placeholderObject);
   const handleEncrypt = () => {
-    const encrypted = encryptJSON(originalData);
-    setEncryptedData(JSON.stringify(encrypted));
+    if (originalData !== "") {
+      const encrypted = encryptJSON(originalData);
+      setEncryptedData(JSON.stringify(encrypted));
+      const decrypted = decryptJSON(JSON.stringify(encrypted));
+      setDecryptedData(decrypted);
+    }
+    else {
+      alert("Please Enter Json Data!");
+    }
   };
 
   const handleDecrypt = () => {
-    const decrypted = decryptJSON(originalData);
-    setDecryptedData(decrypted);
+    if (originalData !== "") {
+      const decrypted = decryptJSON(originalData);
+      setDecryptedData(decrypted);
+      setEncryptedData(originalData);
+    }
+    else {
+      alert("Please Enter Encrypted Data!");
+    }
   };
   const handleClear = () => {
-    debugger;
     setOriginalData("");
     setEncryptedData("");
     setDecryptedData("");

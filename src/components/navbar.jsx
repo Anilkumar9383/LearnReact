@@ -1,39 +1,20 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Container, Navbar } from 'react-bootstrap';
 import Image from '../Images/AkLogo.png';
 import { MdLogout } from "react-icons/md";
-import { FaRegCircleUser } from "react-icons/fa6";
-import React, { useEffect, useState } from 'react';
+// import { FaRegCircleUser } from "react-icons/fa6";
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BiMenuAltLeft } from "react-icons/bi";
 import Sidebar from './Sidebar'
 import { CiMenuKebab } from "react-icons/ci";
 
 function NavbarComponent() {
-  const [activeMenu, setActiveMenu] = useState('Home');
+ // const [activeMenu, setActiveMenu] = useState('Home');
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    switch (location.pathname) {
-      case '/home':
-        setActiveMenu('Home');
-        break;
-      case '/SignUp':
-        setActiveMenu('About');
-        break;
-      case '/home':
-        setActiveMenu('Portfolio');
-        break;
-      case '/home':
-        setActiveMenu('Blog');
-        break;
-      case '/home':
-        setActiveMenu('Contact');
-        break;
-      default:
-        setActiveMenu('');
-    }
     if (window.innerWidth < 768) {
       document.getElementById('Sidebar').classList.add('activsidebar');
       document.getElementById('maincontainar').classList.add('activemaindiv');
@@ -99,7 +80,6 @@ function NavbarComponent() {
     navigate('/UserSetting');
   }
   let name = window.sessionStorage.getItem('FullName').split(" ");
-  debugger;
   let initials = '';
   if (name.length < 2) {
     initials = name[0].charAt(0).toUpperCase()

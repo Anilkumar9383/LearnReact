@@ -25,6 +25,9 @@ function Sidebar() {
         <NavItem className={`menuitem ${location.pathname === '/Contact' ? 'activemenuitem' : ''}`}>
           <Link to='/home' className={`menulink ${location.pathname === '/About' ? 'activemenulink' : ''}`}>Contact</Link>
         </NavItem>
+        <div id='copyrightdiv'>
+          <label id='copyrightlbl'>© 2024 Copyright Admin. All Rights Reserved</label>
+        </div>
       </div>
     </div>
   );

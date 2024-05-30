@@ -9,6 +9,14 @@ body {
     background-attachment: fixed;
 }
 
+#copyrightlbl{
+    font-size: 12px;
+}
+#copyrightdiv{
+    text-align: center;
+    color: black;
+}
+
 .logodiv {
     padding: 0px;
     margin: 0px 20px;
