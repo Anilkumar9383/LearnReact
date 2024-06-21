@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 const Contact = () => {
-  const [ip, setIp] = useState('');
+  const [ip, setIp] = useState()
 
-  useEffect(() => {
-  }, []);
-  function text(url) {
-    return fetch(url).then(res => res.text());
+  const getIp = async () => {
+    const response = await fetch("https://ipapi.co/json/")
+    const data = await response.json()
+    setIp(data.ip)
   }
-
-  text('https://www.cloudflare.com/cdn-cgi/trace').then(data => {
-    let ipRegex = /[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/
-    let ip = data.match(ipRegex)[0];
-    setIp(ip);
-    console.log(ip);
-  });
+  useEffect(() => {
+    getIp()
+  }, [])
   return (
     <div>
       <h1>Client IP Address</h1>
