@@ -269,3 +269,6 @@ body {
     position: sticky;
     top: 0px;
 }
+#usertable th{
+    background-color: #79dad4 !important;
+}

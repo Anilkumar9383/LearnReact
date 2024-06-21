@@ -48,19 +48,23 @@ function UserMaster() {
     }, [token, navigate]);
 
     return (
-        <div style={{ overflowX: "auto" }}>
+        <div style={{ overflowX: "auto" ,maxHeight:"80vh"}}>
             {loading ?
                 <Loder />
                 : null
             }
             <table className="table table-bordered m-auto">
                 <thead>
-                    <tr>
+                    <tr style={{position:'sticky',top:'0px'}} id='usertable'>
                         <th>Id</th>
                         <th>FullName</th>
                         <th>EmailId</th>
                         <th>Username</th>
                         <th>Password</th>
+                        <th>IpAddress</th>
+                        <th>City</th>
+                        <th>Region</th>
+                        <th>Pincode</th>
                         <th>LastLogin</th>
                         <th>CreatedOn</th>
                         <th>UpdatedOn</th>
@@ -75,6 +79,10 @@ function UserMaster() {
                             <td>{obj.EmailId}</td>
                             <td>{obj.Username}</td>
                             <td>{obj.Password}</td>
+                            <td>{obj.IpAddress}</td>
+                            <td>{obj.City}</td>
+                            <td>{obj.Region}</td>
+                            <td>{obj.Pincode}</td>
                             <td>{obj.LastLogin}</td>
                             <td>{obj.CreatedOn}</td>
                             <td>{obj.UpdatedOn}</td>

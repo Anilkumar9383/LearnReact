@@ -3,10 +3,13 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 
 function SignUp() {
   const [connection, setConnection] = useState(null);
+  const [message, setMessage] = useState([]);
+  //const url = "https://localhost:7061/GetClients";
+  const url = "https://akwebapi.somee.com/GetClients";
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:7061/GetClients')
+      .withUrl(url)
       .withAutomaticReconnect()
       .build();
 
@@ -17,7 +20,7 @@ function SignUp() {
         connection.stop();
       }
     };
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (connection) {
@@ -26,14 +29,19 @@ function SignUp() {
         .catch(err => console.error('Error connecting to hub:', err));
 
       connection.on('SendStatusToUser', message => {
-        console.log('Received message:', message);
+        setMessage(message)
       });
     }
-  }, [connection]); 
+  }, [connection]);
 
   return (
     <div>
-
+      <h2>Discount Offers:</h2>
+      <ul>
+        {message.map((offer, index) => (
+          <li key={index}>{offer}</li>
+        ))}
+      </ul>
     </div>
   );
 }

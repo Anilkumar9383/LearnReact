@@ -17,10 +17,10 @@ function Sidebar() {
           </NavItem>
           : null}
         <NavItem className={`menuitem ${location.pathname === '/SignalR' ? 'activemenuitem' : ''}`}>
-          <Link to='/SignalR' className={`menulink ${location.pathname === '/SignalR' ? 'activemenulink' : ''}`}>SignalR</Link>
+          <Link to='/SignalR' className={`menulink ${location.pathname === '/SignalR' ? 'activemenulink' : ''}`}>Utilities</Link>
         </NavItem>
         <NavItem className={`menuitem ${location.pathname === '/About' ? 'activemenuitem' : ''}`}>
-          <Link to='/home' className={`menulink ${location.pathname === '/About' ? 'activemenulink' : ''}`}>About</Link>
+          <Link to='/About' className={`menulink ${location.pathname === '/About' ? 'activemenulink' : ''}`}>About</Link>
         </NavItem>
         <NavItem className={`menuitem ${location.pathname === '/Contact' ? 'activemenuitem' : ''}`}>
           <Link to='/Contact' className={`menulink ${location.pathname === '/Contact' ? 'activemenulink' : ''}`}>Contact</Link>

@@ -19,6 +19,7 @@ function Login() {
   const [txtnpassword, setTxtNpassword] = useState('');
   const [txtcpassword, setTxtCpassword] = useState('');
   const [activeMenu, setActiveMenu] = useState('Loginform');
+
   //const router = useRouter()
   const navigate = useNavigate()
   const handleMenuClick = (menuName) => {
@@ -58,15 +59,19 @@ function Login() {
 
   }, []);
 
-  const submitUser = (e) => {
+  const submitUser = async (e) => {
     debugger;
     setResponce('');
     try {
       e.preventDefault();
       if (checkfildes()) {
         setLoading(true);
-        const inpObj = encryptJSON(JSON.stringify({ "username": username, "password": password }));
-        fetch(apiURL + 'Login/Auth', {
+
+        const response = await fetch("https://ipapi.co/json/")
+        const datas = await response.json()
+
+        const inpObj = encryptJSON(JSON.stringify({ "username": username, "password": password, "ipAddress": datas.ip }));
+        await fetch(apiURL + 'Login/Auth', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
@@ -118,13 +123,16 @@ function Login() {
       return true;
     }
   }
-  const SignUpUser = (e) => {
+  const SignUpUser = async (e) => {
     try {
       e.preventDefault();
       if (checkSignUpfildes()) {
         setLoading(true);
-        const inpObj = encryptJSON(JSON.stringify({ "FullName": fullName, "EmailId": emailId.toLowerCase(), "Username": nusername, "Password": npassword, }));
-        fetch(apiURL + 'SignUp/SignUpUser', {
+        const response = await fetch("https://ipapi.co/json/")
+        const datas = await response.json()
+
+        const inpObj = encryptJSON(JSON.stringify({ "FullName": fullName, "EmailId": emailId.toLowerCase(), "Username": nusername, "Password": npassword, "IpAddress": datas.ip, "City": datas.city, "Region": datas.region, "Pincode": datas.postal }));
+        await fetch(apiURL + 'SignUp/SignUpUser', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
