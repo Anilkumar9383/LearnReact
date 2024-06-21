@@ -23,7 +23,7 @@ function Sidebar() {
           <Link to='/home' className={`menulink ${location.pathname === '/About' ? 'activemenulink' : ''}`}>About</Link>
         </NavItem>
         <NavItem className={`menuitem ${location.pathname === '/Contact' ? 'activemenuitem' : ''}`}>
-          <Link to='/home' className={`menulink ${location.pathname === '/About' ? 'activemenulink' : ''}`}>Contact</Link>
+          <Link to='/Contact' className={`menulink ${location.pathname === '/Contact' ? 'activemenulink' : ''}`}>Contact</Link>
         </NavItem>
         <div id='copyrightdiv'>
           <label id='copyrightlbl'>© 2024 Copyright Admin. All Rights Reserved</label>

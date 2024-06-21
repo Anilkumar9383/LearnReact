@@ -135,6 +135,7 @@ function Login() {
           .then((data) => {
             const result = JSON.parse(decryptJSON(JSON.stringify(data)));
             setLoading(false);
+            debugger;
             if (result[0].Responce === 'Success') {
               alert("You have successfully registered");
               setFullName('')

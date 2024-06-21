@@ -11,6 +11,7 @@ import UserSetting from './components/UserSetting/UserSetting.jsx'
 import Logindetails from './components/Master/Logindetails.jsx'
 import UserMaster from './components/Master/UserMaster.jsx'
 import Loder from './components/Common/Loder.jsx'
+import Contact from './components/Contacts/Contact.jsx'
 //import './components/Common/Loder.css'
 
 function App() {
@@ -39,6 +40,9 @@ function App() {
       </Routes>
       <Routes>
         <Route exact path="/UserMaster" element={<Layout><UserMaster/></Layout>} />
+      </Routes>
+      <Routes>
+        <Route exact path="/Contact" element={<Layout><Contact/></Layout>} />
       </Routes>
     </>
   );
