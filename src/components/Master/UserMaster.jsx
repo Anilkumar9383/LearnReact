@@ -56,7 +56,7 @@ function UserMaster() {
             <table className="table table-bordered m-auto">
                 <thead>
                     <tr style={{position:'sticky',top:'0px'}} id='usertable'>
-                        <th>Id</th>
+                        <th>Sr.No</th>
                         <th>FullName</th>
                         <th>EmailId</th>
                         <th>Username</th>
@@ -74,7 +74,7 @@ function UserMaster() {
                 <tbody>
                     {data.map((obj, index) => (
                         <tr key={index}>
-                            <td>{obj.Id}</td>
+                            <td>{index + 1}</td>
                             <td>{obj.FullName}</td>
                             <td>{obj.EmailId}</td>
                             <td>{obj.Username}</td>

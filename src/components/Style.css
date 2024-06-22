@@ -189,6 +189,8 @@ body {
     border: 1px solid blue;
     border-radius: 10px;
     margin: 10px 0px;
+    display: flex;
+    align-items: center;
 }
 
 .activemenuitem {
@@ -203,12 +205,33 @@ body {
     font-size: 18px;
     font-weight: 400;
     text-decoration: none;
+    margin-left: 5px;
 }
 
 .activemenulink {
     color: blue;
 }
+@media screen and (max-width: 900px) {
 
+    #maincontainar {
+        width: 100%;
+        margin-left: 0%;
+    }
+
+    #Sidebar {
+        width: 25%;
+    }
+
+    .activemaindiv {
+        width: 100% !important;
+        margin-left: 0% !important;
+    }
+
+    .activsidebar {
+        width: 0% !important;
+        margin-left: -25% !important;
+    }
+}
 @media screen and (max-width: 768px) {
 
     #maincontainar {
@@ -228,6 +251,27 @@ body {
     .activsidebar {
         width: 0% !important;
         margin-left: -30% !important;
+    }
+}
+@media screen and (max-width: 600px) {
+
+    #maincontainar {
+        width: 100%;
+        margin-left: 0%;
+    }
+
+    #Sidebar {
+        width: 40%;
+    }
+
+    .activemaindiv {
+        width: 100% !important;
+        margin-left: 0% !important;
+    }
+
+    .activsidebar {
+        width: 0% !important;
+        margin-left: -40% !important;
     }
 }
 @media screen and (max-width: 520px) {
@@ -271,4 +315,7 @@ body {
 }
 #usertable th{
     background-color: #79dad4 !important;
+}
+.table{
+    text-wrap: nowrap;
 }

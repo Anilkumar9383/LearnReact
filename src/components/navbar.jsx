@@ -8,16 +8,22 @@ import { useNavigate } from 'react-router-dom';
 import { BiMenuAltLeft } from "react-icons/bi";
 import Sidebar from './Sidebar'
 import { CiMenuKebab } from "react-icons/ci";
+import { Link } from 'react-router-dom';
 
 function NavbarComponent() {
- // const [activeMenu, setActiveMenu] = useState('Home');
+  // const [activeMenu, setActiveMenu] = useState('Home');
   const navigate = useNavigate();
   const location = useLocation();
+  const token = window.sessionStorage.getItem('JwtToken');
 
   useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
     if (window.innerWidth < 768) {
       document.getElementById('Sidebar').classList.add('activsidebar');
       document.getElementById('maincontainar').classList.add('activemaindiv');
+      document.getElementById('loader').classList.add('activemaindiv');
     }
     if (window.innerWidth < 520) {
       document.getElementById('menudots').style.display = 'block';
@@ -33,10 +39,12 @@ function NavbarComponent() {
       if (window.innerWidth < 768) {
         document.getElementById('Sidebar').classList.add('activsidebar');
         document.getElementById('maincontainar').classList.add('activemaindiv');
+        document.getElementById('loader').classList.add('activemaindiv');
       }
       else {
         document.getElementById('Sidebar').classList.remove('activsidebar');
         document.getElementById('maincontainar').classList.remove('activemaindiv');
+        document.getElementById('loader').classList.remove('activemaindiv');
       }
       if (window.innerWidth < 520) {
         document.getElementById('menudots').style.display = 'block';
@@ -56,8 +64,15 @@ function NavbarComponent() {
   const handleSidebar = () => {
     let sidebar = document.getElementById('Sidebar').classList;
     let maindiv = document.getElementById('maincontainar').classList;
+    let loader = document.getElementById('loader').classList;
     sidebar.contains('activsidebar') ? sidebar.remove('activsidebar') : sidebar.add('activsidebar');
     maindiv.contains('activemaindiv') ? maindiv.remove('activemaindiv') : maindiv.add('activemaindiv');
+    if (window.innerWidth > 768) {
+      loader.contains('activemaindiv') ? loader.remove('activemaindiv') : loader.add('activemaindiv');
+    }
+    else{
+      loader.add('activemaindiv');
+    }
   }
   const handelUser = () => {
     let user = document.getElementById('usersettig');
@@ -79,13 +94,15 @@ function NavbarComponent() {
     }
     navigate('/UserSetting');
   }
-  let name = window.sessionStorage.getItem('FullName').split(" ");
   let initials = '';
-  if (name.length < 2) {
-    initials = name[0].charAt(0).toUpperCase()
-  }
-  else {
-    initials = name[0].charAt(0).toUpperCase() + name[1].charAt(0).toUpperCase();
+  if (window.sessionStorage.getItem('FullName')) {
+    let name = window.sessionStorage.getItem('FullName').split(" ");
+    if (name.length < 2) {
+      initials = name[0].charAt(0).toUpperCase()
+    }
+    else {
+      initials = name[0].charAt(0).toUpperCase() + name[1].charAt(0).toUpperCase();
+    }
   }
 
   return (
@@ -96,18 +113,30 @@ function NavbarComponent() {
             <BiMenuAltLeft style={{ fontSize: '45px' }} id='MenuIcon' onClick={handleSidebar} />
             <Navbar.Brand href="#" className='logodiv'><img src={Image} className='logo' alt='Ak Logo' /></Navbar.Brand>
           </div>
-          <CiMenuKebab style={{ fontSize: '30px', display:'none'}} id='menudots' onClick={handelUser} />
+          {initials !== '' ?
+            <CiMenuKebab style={{ fontSize: '30px', display: 'none' }} id='menudots' onClick={handelUser} />
+            :
+            <div className='my-auto' id='menudots' ><Link to='/login' style={{ fontSize: '18px', color: 'black' }}>Login</Link></div>
+          }
           <div className='d-flex justify-content-between' id='usersettig'>
-            <div className='d-flex'>
-              <div className='m-auto' onClick={handelUsersetting}> <div className='userimg'>
-                <div className=''>{initials}</div>
-              </div></div>
-              <div style={{ padding: "0px 10px" }}>
-                <label className='d-flex' style={{ fontWeight: 'bold' }}>{window.sessionStorage.getItem('FullName')}</label>
-                <label className='d-flex'>{window.sessionStorage.getItem('Username')}</label>
-              </div>
-            </div>
-            <div className='my-auto'><MdLogout size={30} onClick={handleLogout} style={{ cursor: "pointer",marginLeft:'20px' }} className='pointer' /></div>
+            {initials !== '' ?
+              <>
+                <div className='d-flex'>
+                  <div className='m-auto' onClick={handelUsersetting}>
+                    <div className='userimg'>
+                      <div className=''>{initials}</div>
+                    </div>
+                  </div>
+                  <div style={{ padding: "0px 10px" }}>
+                    <label className='d-flex' style={{ fontWeight: 'bold' }}>{window.sessionStorage.getItem('FullName')}</label>
+                    <label className='d-flex'>{window.sessionStorage.getItem('Username')}</label>
+                  </div>
+                </div>
+                <div className='my-auto'><MdLogout size={30} onClick={handleLogout} style={{ cursor: "pointer", marginLeft: '20px' }} className='pointer' /></div>
+              </>
+              :
+              <div className='my-auto'><Link to='/login' style={{ fontSize: '18px', color: 'black' }}>Login</Link></div>
+            }
           </div>
         </Container>
       </Navbar>

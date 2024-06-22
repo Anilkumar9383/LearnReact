@@ -13,8 +13,10 @@
   position: fixed;
   inset: 0px;
   margin: auto;
-  width: 100px;
   height: 30px;
+  width: 80%;
+  margin-left: 20%;
+  text-align: center;
 }
 .scanner span {
     color: transparent;
@@ -81,11 +83,11 @@
     width: 100px;
     height: 100px;
     color: #91ff00;
-    position: fixed;
+    position: absolute;
     inset: 0px;
     margin: auto;
   }
-  
+ 
   .loader:before,
   .loader:after {
     content: '';
