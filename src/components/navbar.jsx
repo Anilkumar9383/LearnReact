@@ -23,7 +23,6 @@ function NavbarComponent() {
     if (window.innerWidth < 768) {
       document.getElementById('Sidebar').classList.add('activsidebar');
       document.getElementById('maincontainar').classList.add('activemaindiv');
-      document.getElementById('loader').classList.add('activemaindiv');
     }
     if (window.innerWidth < 520) {
       document.getElementById('menudots').style.display = 'block';
@@ -39,12 +38,10 @@ function NavbarComponent() {
       if (window.innerWidth < 768) {
         document.getElementById('Sidebar').classList.add('activsidebar');
         document.getElementById('maincontainar').classList.add('activemaindiv');
-        document.getElementById('loader').classList.add('activemaindiv');
       }
       else {
         document.getElementById('Sidebar').classList.remove('activsidebar');
         document.getElementById('maincontainar').classList.remove('activemaindiv');
-        document.getElementById('loader').classList.remove('activemaindiv');
       }
       if (window.innerWidth < 520) {
         document.getElementById('menudots').style.display = 'block';
@@ -64,15 +61,8 @@ function NavbarComponent() {
   const handleSidebar = () => {
     let sidebar = document.getElementById('Sidebar').classList;
     let maindiv = document.getElementById('maincontainar').classList;
-    let loader = document.getElementById('loader').classList;
     sidebar.contains('activsidebar') ? sidebar.remove('activsidebar') : sidebar.add('activsidebar');
     maindiv.contains('activemaindiv') ? maindiv.remove('activemaindiv') : maindiv.add('activemaindiv');
-    if (window.innerWidth > 768) {
-      loader.contains('activemaindiv') ? loader.remove('activemaindiv') : loader.add('activemaindiv');
-    }
-    else{
-      loader.add('activemaindiv');
-    }
   }
   const handelUser = () => {
     let user = document.getElementById('usersettig');
