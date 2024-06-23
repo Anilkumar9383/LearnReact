@@ -18,7 +18,8 @@ function NavbarComponent() {
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      window.sessionStorage.clear();
+      //navigate('/login');
     }
     if (window.innerWidth < 768) {
       document.getElementById('Sidebar').classList.add('activsidebar');

@@ -69,7 +69,7 @@ function Login() {
 
         const response = await fetch("https://ipapi.co/json/")
         const datas = await response.json()
-
+        window.sessionStorage.setItem('IpAddress', datas.ip)
         const inpObj = encryptJSON(JSON.stringify({ "username": username, "password": password, "ipAddress": datas.ip }));
         await fetch(apiURL + 'Login/Auth', {
           method: 'POST',
@@ -87,7 +87,6 @@ function Login() {
               window.sessionStorage.setItem('FullName', result.FullName)
               window.sessionStorage.setItem('EmailId', result.EmailId)
               window.sessionStorage.setItem('Username', result.Username)
-              //window.sessionStorage.setItem('Password', result.Password)
               window.sessionStorage.setItem('LastLogin', result.LastLogin)
               window.sessionStorage.setItem('JwtToken', result.token)
               setUsername('')

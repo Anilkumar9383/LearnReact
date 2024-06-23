@@ -6,6 +6,7 @@ import { FaUserCog } from "react-icons/fa";
 import { FaAddressCard } from "react-icons/fa";
 import { RiFolderUserFill } from "react-icons/ri";
 import { MdSpaceDashboard } from "react-icons/md";
+import { FaUsersGear } from "react-icons/fa6";
 
 function Sidebar() {
   const location = useLocation();
@@ -18,9 +19,12 @@ function Sidebar() {
         </NavItem>
         {window.sessionStorage.getItem('Username') === 'Admin' ?
           <NavItem className={`menuitem ${location.pathname === '/Usermaster' ? 'activemenuitem' : ''}`}>
-            <FaUserCog /><Link to='/Usermaster' className={`menulink ${location.pathname === '/Usermaster' ? 'activemenulink' : ''}`}>User Master</Link>
+            <FaUsersGear /><Link to='/Usermaster' className={`menulink ${location.pathname === '/Usermaster' ? 'activemenulink' : ''}`}>User Master</Link>
           </NavItem>
           : null}
+        <NavItem className={`menuitem ${location.pathname === '/UserSetting' ? 'activemenuitem' : ''}`}>
+          <FaUserCog /><Link to='/UserSetting' className={`menulink ${location.pathname === '/UserSetting' ? 'activemenulink' : ''}`}>User Setting</Link>
+        </NavItem>
         <NavItem className={`menuitem ${location.pathname === '/SignalR' ? 'activemenuitem' : ''}`}>
           <MdSpaceDashboard /><Link to='/SignalR' className={`menulink ${location.pathname === '/SignalR' ? 'activemenulink' : ''}`}>Utilities</Link>
         </NavItem>

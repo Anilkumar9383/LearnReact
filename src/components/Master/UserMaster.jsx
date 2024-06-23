@@ -32,6 +32,7 @@ function UserMaster() {
                     }
                     const data = await response.text();
                     const result = JSON.parse(decryptJSON(JSON.stringify(data)));
+                    console.log(result);
                     setData(result);
                 } else {
                     navigate('/login');
@@ -60,7 +61,7 @@ function UserMaster() {
                         <th>FullName</th>
                         <th>EmailId</th>
                         <th>Username</th>
-                        <th>Password</th>
+                        <th>MobileNo</th>
                         <th>IpAddress</th>
                         <th>City</th>
                         <th>Region</th>
@@ -78,7 +79,7 @@ function UserMaster() {
                             <td>{obj.FullName}</td>
                             <td>{obj.EmailId}</td>
                             <td>{obj.Username}</td>
-                            <td>{obj.Password}</td>
+                            <td>{obj.MobileNo}</td>
                             <td>{obj.IpAddress}</td>
                             <td>{obj.City}</td>
                             <td>{obj.Region}</td>
