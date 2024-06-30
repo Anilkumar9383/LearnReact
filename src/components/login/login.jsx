@@ -5,8 +5,7 @@ import { encryptJSON, decryptJSON } from '../Common/cryptoUtils.jsx';
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState({username : '' ,password : ''});
   const [responce, setResponce] = useState('');
   const [fullName, setFullName] = useState('');
   const [emailId, setEmailId] = useState('');
@@ -20,7 +19,6 @@ function Login() {
   const [txtcpassword, setTxtCpassword] = useState('');
   const [activeMenu, setActiveMenu] = useState('Loginform');
 
-  //const router = useRouter()
   const navigate = useNavigate()
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
@@ -47,8 +45,7 @@ function Login() {
       let form2 = document.getElementById(menuName)
       form1.style.display = 'none';
       form2.style.display = 'block';
-      setUsername('');
-      setPassword('');
+      setUser({username : '' ,password : ''});
       setLoading(false);
       setResponce('');
       document.getElementById('txtusername').style.visibility = 'hidden';
@@ -70,7 +67,7 @@ function Login() {
         const response = await fetch("https://ipapi.co/json/")
         const datas = await response.json()
         window.sessionStorage.setItem('IpAddress', datas.ip)
-        const inpObj = encryptJSON(JSON.stringify({ "username": username, "password": password, "ipAddress": datas.ip }));
+        const inpObj = encryptJSON(JSON.stringify({ "username": user.username, "password": user.password, "ipAddress": datas.ip }));
         await fetch(apiURL + 'Login/Auth', {
           method: 'POST',
           headers: {
@@ -89,8 +86,7 @@ function Login() {
               window.sessionStorage.setItem('Username', result.Username)
               window.sessionStorage.setItem('LastLogin', result.LastLogin)
               window.sessionStorage.setItem('JwtToken', result.token)
-              setUsername('')
-              setPassword('')
+              setUser({username : '' ,password : ''});
               setLoading(false);
               navigate('/home')
             } else {
@@ -110,10 +106,10 @@ function Login() {
     }
   }
   const checkfildes = () => {
-    if (username.toString().trim() === "" || password.toString().trim() === "") {
+    if (user.username.toString().trim() === "" || user.password.toString().trim() === "") {
       setResponce('');
-      document.getElementById('txtusername').style.visibility = username.toString().trim() === "" ? 'visible' : 'hidden';
-      document.getElementById('txtpassword').style.visibility = password.toString().trim() === "" ? 'visible' : 'hidden';
+      document.getElementById('txtusername').style.visibility = user.username.toString().trim() === "" ? 'visible' : 'hidden';
+      document.getElementById('txtpassword').style.visibility = user.password.toString().trim() === "" ? 'visible' : 'hidden';
       return false;
     }
     else {
@@ -237,7 +233,6 @@ function Login() {
   }
 
   const handleKeyPress = (e) => {
-    // Submit form on Enter key press
     if (e.key === 'Enter') {
       e.preventDefault();
       if (activeMenu === 'Loginform') {
@@ -258,16 +253,16 @@ function Login() {
         <br />
         <div id='maindiv'>
           <div id='Loginform' className={`${activeMenu === 'SignUpForm' ? 'LoginformOff' : 'LoginformOn'}`}>
-            <form onKeyPress={handleKeyPress}>
+            <form onKeyPress={handleKeyPress} autoComplete="on" onSubmit={submitUser}>
               <label className='text-white font-bold d-block'>User Name<span className='text-danger'>*</span></label>
-              <input value={username} type="text" className='form-control' placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
+              <input value={user.username} type="text" name="username" className='form-control' autoComplete="username" placeholder="Enter Username" onChange={(e) => setUser({ ...user, username: e.target.value })} />
               <label className='d-block text-danger' id='txtusername' style={{ visibility: "hidden" }}>Please Enter Username</label>
               <label className='text-white font-bold d-flex justify-content-between'><span>Password<span className='text-danger'>*</span></span><label className='text-info' id='btnforget'>Forget Password</label></label>
-              <input value={password} type="password" className='form-control' placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+              <input value={user.password} type="password" name="password" className='form-control' autoComplete="password" placeholder="Enter Password" onChange={(e) => setUser({ ...user, password: e.target.value })} />
               <label className='d-block text-danger' id='txtpassword' style={{ visibility: "hidden" }}>Please Enter Password</label>
               <label className='d-block text-danger' id='txtresponce'>{responce}</label>{loading && <span className='text-danger'>Loading...</span>}
               <div className='d-block d-flex justify-content-between align-items-center'>
-                <button type="button" className="mx-auto my-3 btnLogin" style={{ width: '50%' }} onClick={submitUser}>Login</button>
+                <button type="submit" className="mx-auto my-3 btnLogin" style={{ width: '50%' }}>Login</button>
               </div>
             </form>
           </div>
