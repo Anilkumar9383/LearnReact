@@ -1,0 +1,22 @@
+.dashboard {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: aliceblue;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.line-chart{
+  flex: 1;
+  height: auto;
+  margin-top: 40px;
+}
+.pie-chart {
+  flex: 1;
+  height: auto;
+}

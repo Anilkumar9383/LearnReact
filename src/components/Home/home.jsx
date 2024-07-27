@@ -1,82 +1,145 @@
 import React, { useState, useEffect } from 'react';
 import Loader from '../Common/Loder';
 import { encryptJSON, decryptJSON } from '../Common/cryptoUtils';
+import axios from 'axios';
+import './home.css';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  PieChart, Pie, Cell
+} from 'recharts';
+//import { Button, ButtonGroup } from '@material-ui/core';
+
 
 function Home() {
-  const [loading, setLoading] = useState(true);
-  const [eventType, setEventType] = useState("Encrypt");
-  const [originalData, setOriginalData] = useState("");
-  const [encryptedData, setEncryptedData] = useState("");
-  const [decryptedData, setDecryptedData] = useState("");
-  const placeholderObject = { "key": "value" };
-  const placeholderString = JSON.stringify(placeholderObject);
-  const handleEncrypt = () => {
-    if (originalData !== "") {
-      const encrypted = encryptJSON(originalData);
-      setEncryptedData(JSON.stringify(encrypted));
-      const decrypted = decryptJSON(JSON.stringify(encrypted));
-      setDecryptedData(decrypted);
-    }
-    else {
-      alert("Please Enter Json Data!");
-    }
-  };
+  const [data, setData] = useState([]);
+  const [view, setView] = useState('day');
+  const [pieData, setPieData] = useState([]);
 
-  const handleDecrypt = () => {
-    if (originalData !== "") {
-      const decrypted = decryptJSON(originalData);
-      setDecryptedData(decrypted);
-      setEncryptedData(originalData);
-    }
-    else {
-      alert("Please Enter Encrypted Data!");
-    }
-  };
-  const handleClear = () => {
-    setOriginalData("");
-    setEncryptedData("");
-    setDecryptedData("");
-  }
-
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
   useEffect(() => {
-    setLoading(false);
-  }, []);
+    setView('day');
+    fetchData('day');
+  }, [view]);
+
+  const fetchData = async (view) => {
+    try {
+      // const response = await axios.get(`/api/login-activities?view=${view}`);
+      //setData(response.data);
+      setData(getDataForDay());
+      const pieData = [{
+        name: '10:00',
+        value: 1
+      },
+      {
+        name: '11:00',
+        value: 0.5
+      }]
+      setPieData(pieData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleViewChange = (newView) => {
+    setView(newView);
+  };
+  const getDataForDay = () => {
+    // Return mock data or fetch from database
+    return [
+      { time: '00:00', activeHours: 0 },
+      { time: '04:00', activeHours: 0 },
+      { time: '08:00', activeHours: 0.4 },
+      { time: '12:00', activeHours: 1 },
+      { time: '16:00', activeHours: 0.4 },
+      { time: '20:00', activeHours: 0 },
+      { time: '24:00', activeHours: 0 },
+      // more data
+    ];
+  };
 
   return (
-    <div>
-      {loading ?
-        <Loader />
-        : null
-      }
-      <h1>Welcome</h1>
-      {window.sessionStorage.getItem('Username') === 'Admin' ?
-        <div>
-          <div className='d-flex col-md-12'>
-            <div className='col-md-2 m-2'>
-              <select className='form-select' onChange={e => setEventType(e.target.value)}>
-                <option>Encrypt</option>
-                <option>Decrypt</option>
+    <div className='dashboard'>
+      <div className="pie-chart col-md-12 col-lg-12">
+        <div className='row'>
+          <div className='col-md-4 col-lg-4'>
+            <div style={{ maxWidth: '300px', margin: 'auto' }}>
+              <h3>Activity Details</h3>
+              <select className='form-select' >
+                <option>Today</option>
+                <option>This Week</option>
+                <option>This Month</option>
+                <option>This Year</option>
+                <option>All</option>
               </select>
             </div>
-            <button onClick={handleEncrypt} style={{ display: eventType === "Encrypt" ? "block" : "none" }} className='col-md-2 m-2 btn btn-primary'>Encrypt Data</button>
-            <button onClick={handleDecrypt} style={{ display: eventType === "Decrypt" ? "block" : "none" }} className='col-md-2 m-2 btn btn-primary'>Decrypt Data</button>
-            <button onClick={handleClear} className='col-md-2 m-2 btn btn-danger'>Clear</button>
+            <div style={{ width: 'max-content', margin: 'auto',backgroundColor:'bisque',padding:'5px 20px',textAlign:'center',borderRadius:'25px'}} className='mt-3'>
+                <h4 className='mt-1'>Total Active Hours</h4>
+                <h4 className='mt-1'>05:10</h4>
+              </div>
           </div>
-          <div>
-            <h2>Data</h2>
-            <textarea rows={4} className='w-100' value={originalData} placeholder={eventType === "Decrypt" ? 'Ex: - "Abcdefgh"' : "Ex: - " + placeholderString} onChange={(e) => setOriginalData(e.target.value)} />
+          <div className='col-md-4 col-lg-4'>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
-          <div>
-            <h2>Encrypted Data</h2>
-            <textarea rows={4} className='w-100' readOnly value={encryptedData} />
-          </div>
-
-          <div>
-            <h2>Decrypted Data</h2>
-            <textarea rows={4} className='w-100' readOnly value={decryptedData} />
+          <div className='col-md-4 col-lg-4'>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
-        : null}
+      </div>
+      <div className="line-chart">
+        <ResponsiveContainer width="100%" height={300} style={{ marginLeft: '-25px' }}>
+          <LineChart
+            width={500}
+            height={300}
+            data={data}
+            margin={{
+              top: 5, right: 30, left: 20, bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="activeHours" stroke="#8884d8" activeDot={{ r: 8 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

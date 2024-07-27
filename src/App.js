@@ -14,6 +14,7 @@ import UserMaster from './components/Master/UserMaster.jsx';
 import Loder from './components/Common/Loder.jsx';
 import Contact from './components/Contacts/Contact.jsx';
 import About from './components/About/About.jsx';
+import EncryDecrypt from './components/EncryDecrypt/EncryDecrypt.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route exact path="/UserMaster" element={<Layout><UserMaster /></Layout>} />
         <Route exact path="/Contact" element={<Layout><Contact /></Layout>} />
         <Route exact path="/About" element={<Layout><About /></Layout>} />
+        <Route exact path="/EncryDecrypt" element={<Layout><EncryDecrypt /></Layout>} />
       </Routes>
     </>
   );

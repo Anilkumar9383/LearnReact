@@ -7,6 +7,7 @@ import { FaAddressCard } from "react-icons/fa";
 import { RiFolderUserFill } from "react-icons/ri";
 import { MdSpaceDashboard } from "react-icons/md";
 import { FaUsersGear } from "react-icons/fa6";
+import { GiKeyLock } from "react-icons/gi";
 
 function Sidebar() {
   const location = useLocation();
@@ -18,9 +19,14 @@ function Sidebar() {
           <FaHome /><Link to='/home' className={`menulink ${location.pathname === '/home' ? 'activemenulink' : ''}`}>Home</Link>
         </NavItem>
         {window.sessionStorage.getItem('Username') === 'Admin' ?
-          <NavItem className={`menuitem ${location.pathname === '/Usermaster' ? 'activemenuitem' : ''}`}>
-            <FaUsersGear /><Link to='/Usermaster' className={`menulink ${location.pathname === '/Usermaster' ? 'activemenulink' : ''}`}>User Master</Link>
-          </NavItem>
+          <>
+            <NavItem className={`menuitem ${location.pathname === '/Usermaster' ? 'activemenuitem' : ''}`}>
+              <FaUsersGear /><Link to='/Usermaster' className={`menulink ${location.pathname === '/Usermaster' ? 'activemenulink' : ''}`}>User Master</Link>
+            </NavItem>
+            <NavItem className={`menuitem ${location.pathname === '/EncryDecrypt' ? 'activemenuitem' : ''}`}>
+            <GiKeyLock /><Link to='/EncryDecrypt' className={`menulink ${location.pathname === '/EncryDecrypt' ? 'activemenulink' : ''}`}>Encrypt/Decrypt</Link>
+            </NavItem>
+          </>
           : null}
         <NavItem className={`menuitem ${location.pathname === '/UserSetting' ? 'activemenuitem' : ''}`}>
           <FaUserCog /><Link to='/UserSetting' className={`menulink ${location.pathname === '/UserSetting' ? 'activemenulink' : ''}`}>User Setting</Link>
