@@ -56,7 +56,7 @@ function NavbarComponent() {
   }
   const handleLogout = () => {
     window.sessionStorage.clear();
-    //navigate('/login');
+    navigate('/login');
   };
 
   const handleSidebar = () => {

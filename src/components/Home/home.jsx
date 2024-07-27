@@ -72,13 +72,13 @@ function Home() {
                 <option>All</option>
               </select>
             </div>
-            <div style={{ width: 'max-content', margin: 'auto',backgroundColor:'bisque',padding:'5px 20px',textAlign:'center',borderRadius:'25px'}} className='mt-3'>
-                <h4 className='mt-1'>Total Active Hours</h4>
-                <h4 className='mt-1'>05:10</h4>
+            <div style={{ width: 'max-content', margin: 'auto',backgroundColor:'bisque',padding:'5px 20px',textAlign:'center',borderRadius:'10px',color:'brown'}} className='mt-3'>
+                <h4 className='mt-1'>Total Hours:- 05:10</h4>
+                {/* <h4 className='mt-1'>05:10</h4> */}
               </div>
           </div>
-          <div className='col-md-4 col-lg-4'>
-            <ResponsiveContainer width="100%" height={200}>
+          <div className='col-md-4 col-lg-4 col-sm-6 Dashsmview'>
+            <ResponsiveContainer width="100%" height={200} className='DashsmHeight'>
               <PieChart>
                 <Pie
                   data={pieData}
@@ -98,8 +98,8 @@ function Home() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className='col-md-4 col-lg-4'>
-            <ResponsiveContainer width="100%" height={200}>
+          <div className='col-md-4 col-lg-4 col-sm-6 Dashsmview'>
+            <ResponsiveContainer width="100%" height={200} className='DashsmHeight'>
               <PieChart>
                 <Pie
                   data={pieData}

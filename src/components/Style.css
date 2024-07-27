@@ -273,6 +273,12 @@ body {
         width: 0% !important;
         margin-left: -40% !important;
     }
+    .Dashsmview{
+        width: 50%;
+    }
+    .DashsmHeight{
+        height: 160px !important;
+    }
 }
 @media screen and (max-width: 520px) {
 
@@ -312,6 +318,7 @@ body {
     background-color: #dbffff;
     position: sticky;
     top: 0px;
+    z-index: 1;
 }
 #usertable th{
     background-color: #79dad4 !important;
