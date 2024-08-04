@@ -9,7 +9,7 @@ import {
 import apiURL from '../Common/ApiUrl.jsx';
 import {
   parse, differenceInMinutes, format, startOfWeek, endOfWeek, eachDayOfInterval,
-  startOfMonth, endOfMonth, eachMonthOfInterval, startOfYear, endOfYear, subYears
+  startOfMonth, endOfMonth, eachMonthOfInterval, startOfYear, endOfYear, subYears,isValid
 } from 'date-fns';
 
 function Home() {
@@ -48,12 +48,12 @@ function Home() {
       });
       const data = await response.text();
       const result = JSON.parse(decryptJSON(JSON.stringify(data)));
-      //console.log('Fetched Data:', result);
+      console.log('Fetched Data:', result);
       setLogins(result);
       const aggregatedData = aggregateTime(result, e);
-      //console.log('Aggregated Data:', aggregatedData);
+      console.log('Aggregated Data:', aggregatedData);
       const formattedData = formatTimeData(aggregatedData, e);
-      //console.log('Formatted Data:', formattedData);
+      console.log('Formatted Data:', formattedData);
       fetchData(formattedData,e);
     } catch (error) {
       console.error('Error during login:', error);
@@ -87,8 +87,18 @@ function Home() {
     await GetLoginHistory(selectedValue);
   };
 
+  
   const parseDate = (dateString) => {
-    return parse(dateString, 'dd-MM-yyyy hh:mm:ss a', new Date());
+    const formats = ['MM/dd/yyyy hh:mm:ss a', 'dd-MM-yyyy hh:mm:ss a', 'yyyy-MM-dd HH:mm:ss'];
+
+    for (const format of formats) {
+      const parsedDate = parse(dateString, format, new Date());
+      if (isValid(parsedDate)) {
+        return parsedDate;
+      }
+    }
+
+    throw new Error('Invalid date format');
   };
 
   const initializeTimeMap = (flag) => {
