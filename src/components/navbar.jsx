@@ -3,18 +3,22 @@ import { Container, Navbar } from 'react-bootstrap';
 import Image from '../Images/AkLogo.png';
 import { MdLogout } from "react-icons/md";
 // import { FaRegCircleUser } from "react-icons/fa6";
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BiMenuAltLeft } from "react-icons/bi";
 import Sidebar from './Sidebar'
 import { CiMenuKebab } from "react-icons/ci";
 import { Link } from 'react-router-dom';
+import apiURL from '../components/Common/ApiUrl.jsx';
+//import axios from 'axios';
+import { encryptJSON, decryptJSON } from '../components/Common/cryptoUtils.jsx';
 
 function NavbarComponent() {
   // const [activeMenu, setActiveMenu] = useState('Home');
   const navigate = useNavigate();
   const location = useLocation();
   const token = window.sessionStorage.getItem('JwtToken');
+  const Username = window.sessionStorage.getItem('Username');
 
   useEffect(() => {
     if (!token) {
@@ -55,6 +59,7 @@ function NavbarComponent() {
     }, true);
   }
   const handleLogout = () => {
+    logoutTimeUpdate('Logout');
     window.sessionStorage.clear();
     navigate('/login');
   };
@@ -95,6 +100,40 @@ function NavbarComponent() {
       initials = name[0].charAt(0).toUpperCase() + name[1].charAt(0).toUpperCase();
     }
   }
+
+  const [wasPageCleanedUp, setWasPageCleanedUp] = useState(false);
+
+  const logoutTimeUpdate = async (e) => {
+    if (!wasPageCleanedUp) {
+      try {
+        const inpObj = encryptJSON(JSON.stringify({"username": Username ,"flag": e}));
+        await fetch(apiURL + "Login/Logout", {
+          method: "POST",
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(inpObj),
+      });
+        setWasPageCleanedUp(true);
+      } catch (error) {
+        console.error('Error updating logout time:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleUnload = () => {
+      logoutTimeUpdate('Update');
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+  }, [wasPageCleanedUp]);
+
 
   return (
     <>
