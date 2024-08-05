@@ -8,8 +8,8 @@ import {
 } from 'recharts';
 import apiURL from '../Common/ApiUrl.jsx';
 import {
-  parse, differenceInMinutes, format, startOfWeek, endOfWeek, eachDayOfInterval,
-  startOfMonth, endOfMonth, eachMonthOfInterval, startOfYear, endOfYear, subYears,isValid
+  parse, differenceInSeconds, format, startOfWeek, endOfWeek, eachDayOfInterval,
+  startOfMonth, endOfMonth, eachMonthOfInterval, startOfYear, endOfYear, subYears, isValid, addSeconds
 } from 'date-fns';
 
 function Home() {
@@ -18,20 +18,16 @@ function Home() {
   const [Logins, setLogins] = useState([]);
   const [pieData, setPieData] = useState([]);
   const [pieData1, setPieData1] = useState([]);
-  const [totalHours, setTotalHours] = useState('00:00'); // Initialize with 0 hours
+  const [totalHours, setTotalHours] = useState('00:00:00'); // Initialize with 0 hours
+  const token = window.sessionStorage.getItem('JwtToken');
   const Username = window.sessionStorage.getItem('Username');
   const [flag, setFlag] = useState("Day");
+  const [LastLogin, setLastLogin] = useState();
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#46ff33', '#33ffca', '#8033ff', '#ff33ce'];
 
   useEffect(() => {
     GetLoginHistory(flag);
-    //Set an interval to refresh data every 5 minutes
-    const interval = setInterval(() => {
-      GetLoginHistory(flag);
-    }, 60000); // 300000ms = 5 minutes
-
-    return () => clearInterval(interval); // Clear interval on component unmount
   }, []);
 
   const GetLoginHistory = async (e) => {
@@ -42,6 +38,7 @@ function Home() {
       const response = await fetch(apiURL + 'Login/LoginHistory', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'content-type': 'application/json',
         },
         body: JSON.stringify(inpObj),
@@ -51,10 +48,28 @@ function Home() {
       console.log('Fetched Data:', result);
       setLogins(result);
       const aggregatedData = aggregateTime(result, e);
-      console.log('Aggregated Data:', aggregatedData);
+     // console.log('Aggregated Data:', aggregatedData);
       const formattedData = formatTimeData(aggregatedData, e);
-      console.log('Formatted Data:', formattedData);
-      fetchData(formattedData,e);
+      //console.log('Formatted Data:', formattedData);
+      fetchData(formattedData, e);
+      const parseDate1 = (dateString) => new Date(dateString);
+      // Get current time
+      const now = new Date();
+      // Find the closest LastLogin
+      const closestLogin = result.reduce((closest, entry) => {
+        const loginDate = parseDate1(entry.LastLogin);
+        const currentDifference = Math.abs(now - loginDate);
+
+        if (closest === null || currentDifference < closest.difference) {
+          return {
+            date: loginDate,
+            difference: currentDifference,
+            entry
+          };
+        }
+        return closest;
+      }, null);
+      setLastLogin(closestLogin)
     } catch (error) {
       console.error('Error during login:', error);
       alert(error.message);
@@ -64,20 +79,39 @@ function Home() {
   };
 
   const fetchData = (Datas, flag) => {
-    console.log("Fetched Data for Charts:", Datas);
     const pieData = Datas.map(item => ({
       name: item.dateStr,
       value: item.totalTime
     }));
-    setPieData(pieData);
-    if (flag === 'Day') {
-      setPieData1(pieData);
-    }
+    const filteredData = pieData.filter(obj => obj.value !== 0);
+    // Calculate the total sum of the filtered values
+    const totalValue = filteredData.reduce((acc, obj) => acc + obj.value, 0);
+    // Calculate the percentage for each remaining value
+    const updatedData = filteredData.map(obj => ({
+      ...obj,
+      percentage: totalValue > 0 ? (obj.value / totalValue * 100).toFixed(2) : 0
+    }));
 
-    const totalMinutes = Datas.reduce((sum, item) => sum + item.totalTime, 0);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    setTotalHours(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
+    setPieData(updatedData);
+    if (flag === 'Day') {
+      setPieData1(updatedData);
+      console.log('Day',updatedData)
+    }
+    else{
+      const updatedData = pieData1.map(item => {
+        // Increment value by 1
+        return {
+          ...item,
+          value: item.value + 1
+        };
+      });
+      setPieData1(updatedData);
+    }
+    const totalSeconds = Datas.reduce((sum, item) => sum + item.totalTime, 0);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    setTotalHours(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
     setData(Datas);
   };
 
@@ -87,7 +121,6 @@ function Home() {
     await GetLoginHistory(selectedValue);
   };
 
-  
   const parseDate = (dateString) => {
     const formats = ['MM/dd/yyyy hh:mm:ss a', 'dd-MM-yyyy hh:mm:ss a', 'yyyy-MM-dd HH:mm:ss'];
 
@@ -102,7 +135,6 @@ function Home() {
   };
 
   const initializeTimeMap = (flag) => {
-    debugger;
     const timeMap = {};
     const today = new Date();
     switch (flag) {
@@ -172,7 +204,6 @@ function Home() {
     }
 
     data.forEach(({ LastLogin, LastLogout }) => {
-      debugger;
       const loginTime = parseDate(LastLogin);
       const logoutTime = parseDate(LastLogout);
 
@@ -185,7 +216,6 @@ function Home() {
       }
 
       let dateStr;
-      debugger;
       switch (flag) {
         case 'Day':
           dateStr = format(loginTime, 'HH:00');
@@ -205,13 +235,12 @@ function Home() {
           break;
       }
 
-      const durationMinutes = differenceInMinutes(logoutTime, loginTime);
-      debugger;
-      if (durationMinutes > 0) {
+      const durationSeconds = differenceInSeconds(logoutTime, loginTime);
+      if (durationSeconds > 0) {
         if (!timeMap[dateStr]) {
           timeMap[dateStr] = { dateStr, totalTime: 0 };
         }
-        timeMap[dateStr].totalTime += durationMinutes;
+        timeMap[dateStr].totalTime += durationSeconds;
       }
     });
 
@@ -228,9 +257,9 @@ function Home() {
   const CustomTooltip = ({ payload, label }) => {
     if (payload && payload.length) {
       const { totalTime } = payload[0].payload;
-      const hours = Math.floor(totalTime / 60);
-      const minutes = totalTime % 60;
-      const seconds = 0; // Assuming totalTime is in minutes, so seconds are 0
+      const hours = Math.floor(totalTime / 3600);
+      const minutes = Math.floor((totalTime % 3600) / 60);
+      const seconds = totalTime % 60;
       const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
       return (
@@ -243,13 +272,13 @@ function Home() {
 
     return null;
   };
+
   const CustomTooltip1 = ({ payload }) => {
-    debugger
     if (payload && payload.length) {
-      const { value } = payload[0].payload; // Access value instead of totalTime
-      const hours = Math.floor(value / 60);
-      const minutes = value % 60;
-      const seconds = 0; // Assuming value is in minutes, so seconds are 0
+      const { value } = payload[0].payload;
+      const hours = Math.floor(value / 3600);
+      const minutes = Math.floor((value % 3600) / 60);
+      const seconds = value % 60;
       const label = payload[0].name;
       const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
@@ -263,6 +292,79 @@ function Home() {
 
     return null;
   };
+
+  const incrementTime = () => {
+    if (Logins.length > 0) {
+      const updatedData = Logins.map(entry => {
+        if (entry.LastLogin === LastLogin.entry.LastLogin) {
+          try {
+            // Parse LastLogout date
+            const lastLogoutDate = parseDate(entry.LastLogout);
+            const updatedLastLogoutDate = addSeconds(lastLogoutDate, 1);
+            const updatedLastLogout = format(updatedLastLogoutDate, 'M/d/yyyy h:mm:ss a');
+            return {
+              ...entry,
+              LastLogout: updatedLastLogout
+            };
+          } catch (error) {
+            console.error('Error processing entry:', error);
+            return entry;
+          }
+        }
+
+        return entry;
+      });
+      setLogins(updatedData)
+      const aggregatedData = aggregateTime(Logins, flag);
+      const formattedData = formatTimeData(aggregatedData, flag);
+      fetchData(formattedData, flag);
+    }
+
+    const [hours, minutes, seconds] = totalHours.split(':').map(Number);
+    let newSeconds = seconds + 1;
+    let newMinutes = minutes;
+    let newHours = hours;
+
+    if (newSeconds === 60) {
+      newSeconds = 0;
+      newMinutes += 1;
+    }
+
+    if (newMinutes === 60) {
+      newMinutes = 0;
+      newHours += 1;
+    }
+
+    setTotalHours(
+      `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}:${String(newSeconds).padStart(2, '0')}`
+    );
+    if (newSeconds === 0) {
+      UpdateLoginHistory()
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(incrementTime, 1000);
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  }, [totalHours]);
+
+
+  const UpdateLoginHistory = async () => {
+    try {
+      const inpObj = encryptJSON(JSON.stringify({ "username": Username, "flag": 'Update' }));
+      await fetch(apiURL + "Login/Logout", {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(inpObj),
+      });
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+
 
   return (
     <div className='dashboard'>
@@ -291,10 +393,10 @@ function Home() {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
+                  innerRadius={0}
                   outerRadius={80}
                   fill="#8884d8"
-                  paddingAngle={5}
+                  paddingAngle={0}
                   dataKey="value"
                 >
                   {pieData.map((entry, index) => (
@@ -313,13 +415,13 @@ function Home() {
                   data={pieData1}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
+                  innerRadius={0}
                   outerRadius={80}
                   fill="#8884d8"
-                  paddingAngle={5}
+                  paddingAngle={0}
                   dataKey="value"
                 >
-                  {pieData.map((entry, index) => (
+                  {pieData1.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
