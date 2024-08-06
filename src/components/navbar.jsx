@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import apiURL from '../components/Common/ApiUrl.jsx';
 //import axios from 'axios';
 import { encryptJSON, decryptJSON } from '../components/Common/cryptoUtils.jsx';
+import { AiFillMessage } from "react-icons/ai";
+
 
 function NavbarComponent() {
   // const [activeMenu, setActiveMenu] = useState('Home');
@@ -106,15 +108,15 @@ function NavbarComponent() {
   const logoutTimeUpdate = async (e) => {
     if (!wasPageCleanedUp) {
       try {
-        const inpObj = encryptJSON(JSON.stringify({"username": Username ,"flag": e}));
+        const inpObj = encryptJSON(JSON.stringify({ "username": Username, "flag": e }));
         await fetch(apiURL + "Login/Logout", {
           method: "POST",
           headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(inpObj),
-      });
+        });
         setWasPageCleanedUp(true);
       } catch (error) {
         console.error('Error updating logout time:', error);
@@ -134,6 +136,10 @@ function NavbarComponent() {
     };
   }, [wasPageCleanedUp]);
 
+  const handelMessage = () => {
+    console.log('Message Click')
+  }
+
 
   return (
     <>
@@ -143,14 +149,25 @@ function NavbarComponent() {
             <BiMenuAltLeft style={{ fontSize: '45px' }} id='MenuIcon' onClick={handleSidebar} />
             <Navbar.Brand href="#" className='logodiv'><img src={Image} className='logo' alt='Ak Logo' /></Navbar.Brand>
           </div>
-          {initials !== '' ?
+          {/* {initials !== '' ?
             <CiMenuKebab style={{ fontSize: '30px', display: 'none' }} id='menudots' onClick={handelUser} />
             :
             <div className='my-auto' id='menudots' ><Link to='/login' style={{ fontSize: '18px', color: 'black' }}>Login</Link></div>
-          }
-          <div className='d-flex justify-content-between' id='usersettig'>
-            {initials !== '' ?
-              <>
+            } */}
+          {initials !== '' ?
+            <>
+              <div id='menudots'>
+                <div style={{margin:'auto'}}>
+                  <AiFillMessage className='messageicon' onClick={handelMessage}/>
+                  <span className='messageCnt' onClick={handelMessage}>0</span>
+                </div>
+                <CiMenuKebab style={{ fontSize: '30px' }} onClick={handelUser} />
+              </div>
+              <div className='d-flex justify-content-between' id='usersettig'>
+                <div style={{margin:'auto'}}>
+                  <AiFillMessage className='messageicon' onClick={handelMessage}/>
+                  <span className='messageCnt' onClick={handelMessage}>0</span>
+                </div>
                 <div className='d-flex'>
                   <div className='m-auto' onClick={handelUsersetting}>
                     <div className='userimg'>
@@ -163,11 +180,11 @@ function NavbarComponent() {
                   </div>
                 </div>
                 <div className='my-auto'><MdLogout size={30} onClick={handleLogout} style={{ cursor: "pointer", marginLeft: '20px' }} className='pointer' /></div>
-              </>
-              :
-              <div className='my-auto'><Link to='/login' style={{ fontSize: '18px', color: 'black' }}>Login</Link></div>
-            }
-          </div>
+              </div>
+            </>
+            :
+            <div className='my-auto'><Link to='/login' style={{ fontSize: '18px', color: 'black' }}>Login</Link></div>
+          }
         </Container>
       </Navbar>
       <Sidebar />

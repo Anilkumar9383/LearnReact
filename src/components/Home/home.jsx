@@ -24,7 +24,7 @@ function Home() {
   const [flag, setFlag] = useState("Day");
   const [LastLogin, setLastLogin] = useState();
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#46ff33', '#33ffca', '#8033ff', '#ff33ce'];
+  const COLORS = ['#46ff33', '#33ffca', '#8033ff', '#fcff33', '#0088FE', '#00C49F', '#ff33ce', '#FFBB28', '#FF8042', '#e633ff'];
 
   useEffect(() => {
     GetLoginHistory(flag);
@@ -48,7 +48,7 @@ function Home() {
       console.log('Fetched Data:', result);
       setLogins(result);
       const aggregatedData = aggregateTime(result, e);
-     // console.log('Aggregated Data:', aggregatedData);
+      // console.log('Aggregated Data:', aggregatedData);
       const formattedData = formatTimeData(aggregatedData, e);
       //console.log('Formatted Data:', formattedData);
       fetchData(formattedData, e);
@@ -95,9 +95,9 @@ function Home() {
     setPieData(updatedData);
     if (flag === 'Day') {
       setPieData1(updatedData);
-      console.log('Day',updatedData)
+      //console.log('Day',updatedData)
     }
-    else{
+    else {
       const updatedData = pieData1.map(item => {
         // Increment value by 1
         return {
@@ -210,9 +210,9 @@ function Home() {
       if (flag !== 'Day') {
         if (logoutTime <= loginTime) return;
 
-        if (loginTime < startDate || logoutTime > endDate) {
-          return;
-        }
+        // if (loginTime < startDate || logoutTime > endDate) {
+        //   return;
+        // }
       }
 
       let dateStr;
@@ -234,15 +234,37 @@ function Home() {
           dateStr = format(loginTime, 'MMM-yyyy');
           break;
       }
+      if (flag === 'Day') {
+        let current = loginTime;
 
-      const durationSeconds = differenceInSeconds(logoutTime, loginTime);
-      if (durationSeconds > 0) {
-        if (!timeMap[dateStr]) {
-          timeMap[dateStr] = { dateStr, totalTime: 0 };
+        while (current < logoutTime) {
+          const nextHour = new Date(current);
+          nextHour.setHours(nextHour.getHours() + 1, 0, 0, 0);
+
+          const end = nextHour > logoutTime ? logoutTime : nextHour;
+          const durationSeconds = differenceInSeconds(end, current);
+
+          const dateStr = format(current, 'HH:00');
+
+          if (!timeMap[dateStr]) {
+            timeMap[dateStr] = { dateStr, totalTime: 0 };
+          }
+
+          timeMap[dateStr].totalTime += durationSeconds;
+          current = end;
         }
-        timeMap[dateStr].totalTime += durationSeconds;
+      }
+      else {
+        const durationSeconds = differenceInSeconds(logoutTime, loginTime);
+        if (durationSeconds > 0) {
+          if (!timeMap[dateStr]) {
+            timeMap[dateStr] = { dateStr, totalTime: 0 };
+          }
+          timeMap[dateStr].totalTime += durationSeconds;
+        }
       }
     });
+
 
     return Object.values(timeMap);
   };

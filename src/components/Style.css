@@ -9,10 +9,11 @@ body {
     background-attachment: fixed;
 }
 
-#copyrightlbl{
+#copyrightlbl {
     font-size: 12px;
 }
-#copyrightdiv{
+
+#copyrightdiv {
     text-align: center;
     color: black;
     position: absolute;
@@ -211,6 +212,7 @@ body {
 .activemenulink {
     color: blue;
 }
+
 @media screen and (max-width: 900px) {
 
     #maincontainar {
@@ -232,6 +234,7 @@ body {
         margin-left: -25% !important;
     }
 }
+
 @media screen and (max-width: 768px) {
 
     #maincontainar {
@@ -253,6 +256,7 @@ body {
         margin-left: -30% !important;
     }
 }
+
 @media screen and (max-width: 600px) {
 
     #maincontainar {
@@ -273,13 +277,16 @@ body {
         width: 0% !important;
         margin-left: -40% !important;
     }
-    .Dashsmview{
+
+    .Dashsmview {
         width: 50%;
     }
-    .DashsmHeight{
+
+    .DashsmHeight {
         height: 160px !important;
     }
 }
+
 @media screen and (max-width: 520px) {
 
     #maincontainar {
@@ -301,7 +308,8 @@ body {
         margin-left: -50% !important;
     }
 }
-.userimg{
+
+.userimg {
     width: 40px;
     height: 40px;
     color: white;
@@ -314,15 +322,42 @@ body {
     font-size: 20px;
     cursor: pointer;
 }
-.marqueedata{
+
+.marqueedata {
     background-color: #dbffff;
     position: sticky;
     top: 0px;
     z-index: 1;
 }
-#usertable th{
+
+#usertable th {
     background-color: #79dad4 !important;
 }
-.table{
+
+.table {
     text-wrap: nowrap;
+}
+
+.messageicon {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: auto 10px;
+    font-size: 30px;
+    cursor: pointer;
+}
+.messageCnt{
+    font-size: 12px;
+    background: red;
+    border-radius: 50%;
+    width: max-content;
+    text-align: center;
+    padding: 0px;
+    min-width: 18px;
+    display: inline-block;
+    position: relative;
+    right: 20px;
+    font-weight: bold;
+    cursor: pointer;
 }

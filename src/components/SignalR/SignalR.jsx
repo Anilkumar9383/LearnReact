@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 //import { HubConnectionBuilder } from '@microsoft/signalr';
 import * as signalR from '@microsoft/signalr';
 import { encryptJSON, decryptJSON } from '../Common/cryptoUtils.jsx';
+import SignalRURL from '../Common/SignalRURL.jsx';
 
 function SignUp() {
   const [connection, setConnection] = useState(null);
   const [data, setData] = useState([]);
-  const url = "https://localhost:7061/MessageHub";
+ // const url = "https://localhost:7061/MessageHub";
   //const url = "https://akwebapi.somee.com/GetClients";
 
   // useEffect(() => {
@@ -28,7 +29,7 @@ function SignUp() {
     
     // Destructure the incoming data
     const { ChangeType, ChangeData } = JSON.parse(incomingData);
-    const { Id, Name, Email } = ChangeData;
+    const { Id, Name, Email } = JSON.parse(ChangeData);
 
     setData(prevData => {
       switch (ChangeType) {
@@ -73,7 +74,7 @@ function SignUp() {
   useEffect(() => {
     const connectToHub = async () => {
       const connection = new signalR.HubConnectionBuilder()
-        .withUrl(url)  // Replace with your hub URL
+        .withUrl(SignalRURL)  // Replace with your hub URL
         .build();
 
       connection.on('ReceiveCustomersMessage', message => {
